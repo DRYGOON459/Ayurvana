@@ -1,0 +1,6 @@
+com\ayurvana\AyurvanaApplication.class
+com\ayurvana\config\CorsConfig.class
+com\ayurvana\config\SecurityConfig.class
+com\ayurvana\controller\HealthController.class
+com\ayurvana\dto\response\ApiResponse.class
+com\ayurvana\dto\response\ApiResponse$ApiResponseBuilder.class
