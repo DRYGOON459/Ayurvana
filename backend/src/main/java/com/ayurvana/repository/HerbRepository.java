@@ -18,6 +18,8 @@ public interface HerbRepository extends JpaRepository<Herb, UUID> {
 
     Optional<Herb> findByScientificNameIgnoreCase(String scientificName);
 
+    Optional<Herb> findByCommonNameContainingIgnoreCase(String commonName);
+
     Page<Herb> findByPublishedTrue(Pageable pageable);
 
     @Query("SELECT h FROM Herb h LEFT JOIN FETCH h.safety s LEFT JOIN FETCH h.references r WHERE h.slug = :slug")

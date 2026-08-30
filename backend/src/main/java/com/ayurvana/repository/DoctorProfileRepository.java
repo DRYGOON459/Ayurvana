@@ -31,4 +31,20 @@ public interface DoctorProfileRepository extends JpaRepository<DoctorProfile, UU
             @Param("language") String language,
             Pageable pageable
     );
+
+    @Query(value = "SELECT d FROM DoctorProfile d JOIN FETCH d.user u WHERE d.verified = true AND " +
+           "(:specialization IS NULL OR LOWER(d.primarySpecialization) LIKE LOWER(CONCAT('%', :specialization, '%'))) AND " +
+           "(:query IS NULL OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(d.qualifications) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(d.primarySpecialization) LIKE LOWER(CONCAT('%', :query, '%')))",
+           countQuery = "SELECT count(d) FROM DoctorProfile d JOIN d.user u WHERE d.verified = true AND " +
+           "(:specialization IS NULL OR LOWER(d.primarySpecialization) LIKE LOWER(CONCAT('%', :specialization, '%'))) AND " +
+           "(:query IS NULL OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(d.qualifications) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+           " LOWER(d.primarySpecialization) LIKE LOWER(CONCAT('%', :query, '%')))")
+    Page<DoctorProfile> findVerifiedWithFilters(
+            @Param("specialization") String specialization,
+            @Param("query") String query,
+            Pageable pageable
+    );
 }
