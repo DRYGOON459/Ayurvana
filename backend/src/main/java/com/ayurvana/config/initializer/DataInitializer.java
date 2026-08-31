@@ -172,7 +172,7 @@ public class DataInitializer implements CommandLineRunner {
                                                         "Clinical trials indicate Withanolides in Ashwagandha reduce serum cortisol levels, attenuate perceived stress, and support restful sleep architecture.")
                                         .dosageAndPreparations(
                                                         "Powder (Churna): 3–6 grams daily with warm milk or ghee; Extract capsules: 300–600 mg standardized extract.")
-                                        .imageUrl("https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/ashwagandha.jpg")
                                         .published(true)
                                         .build();
 
@@ -227,7 +227,7 @@ public class DataInitializer implements CommandLineRunner {
                                                         "Eugenol and rosmarinic acid constituents exhibit significant antimicrobial, antioxidant, and immunomodulatory activities.")
                                         .dosageAndPreparations(
                                                         "Infusion (Tea): 2–3 grams dried leaves steeped in boiling water twice daily; Fresh leaf juice: 5–10 ml.")
-                                        .imageUrl("https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/tulsi.jpg")
                                         .published(true)
                                         .build();
 
@@ -274,7 +274,7 @@ public class DataInitializer implements CommandLineRunner {
                                                         "Azadirachtin and nimbin demonstrate proven broad-spectrum antibacterial and anti-inflammatory properties.")
                                         .dosageAndPreparations(
                                                         "Leaf powder: 1–3 grams daily; Bark decoction: 15–30 ml; Oil strictly for external application.")
-                                        .imageUrl("https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/neem.jpg")
                                         .published(true)
                                         .build();
 
@@ -314,7 +314,7 @@ public class DataInitializer implements CommandLineRunner {
                                                         "Curcuminoids provide potent NF-kB inhibition, systemic antioxidant defence, and cellular protection.")
                                         .dosageAndPreparations(
                                                         "Rhizome powder: 1–3 grams with pinch of black pepper (Piperine) and healthy fats.")
-                                        .imageUrl("https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/turmeric.jpg")
                                         .published(true)
                                         .build();
 
@@ -350,7 +350,7 @@ public class DataInitializer implements CommandLineRunner {
                                         .modernResearchSummary(
                                                         "Bacosides A and B facilitate synaptic transmission and support neuroplasticity.")
                                         .dosageAndPreparations("Powder: 2–3 grams with ghee; Fresh juice: 10–15 ml.")
-                                        .imageUrl("https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/brahmi.jpg")
                                         .published(true)
                                         .build();
 
@@ -389,7 +389,7 @@ public class DataInitializer implements CommandLineRunner {
                                                         "Cordifolioside and tinocordiside compounds activate macrophage phagocytosis.")
                                         .dosageAndPreparations(
                                                         "Stem Decoction (Kwath): 20–30 ml; Satva (Starch Extract): 500 mg–1 gram.")
-                                        .imageUrl("https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80")
+                                        .imageUrl("/images/herbs/giloy.jpg")
                                         .published(true)
                                         .build();
 
@@ -407,7 +407,24 @@ public class DataInitializer implements CommandLineRunner {
                         herbRepository.save(giloy);
 
                         log.info("Seeded 6 comprehensive medicinal herbs with safety and evidence citations.");
+                } else {
+                        updateHerbImageIfOutdated("ashwagandha", "/images/herbs/ashwagandha.jpg");
+                        updateHerbImageIfOutdated("tulsi", "/images/herbs/tulsi.jpg");
+                        updateHerbImageIfOutdated("neem", "/images/herbs/neem.jpg");
+                        updateHerbImageIfOutdated("turmeric", "/images/herbs/turmeric.jpg");
+                        updateHerbImageIfOutdated("brahmi", "/images/herbs/brahmi.jpg");
+                        updateHerbImageIfOutdated("giloy", "/images/herbs/giloy.jpg");
                 }
+        }
+
+        private void updateHerbImageIfOutdated(String slug, String newImageUrl) {
+                herbRepository.findBySlug(slug).ifPresent(herb -> {
+                        if (!newImageUrl.equals(herb.getImageUrl())) {
+                                herb.setImageUrl(newImageUrl);
+                                herbRepository.save(herb);
+                                log.info("Updated authentic botanical photograph for herb {}: {}", slug, newImageUrl);
+                        }
+                });
         }
 
         private void seedYogaPoses() {

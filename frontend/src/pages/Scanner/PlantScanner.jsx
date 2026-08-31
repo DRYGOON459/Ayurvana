@@ -46,14 +46,15 @@ export default function PlantScanner() {
     const dummyBlob = new Blob(["sample image content"], { type: "image/jpeg" });
     const dummyFile = new File([dummyBlob], `${sampleName}.jpg`, { type: "image/jpeg" });
 
+    let sampleImg = '/images/herbs/ashwagandha.jpg';
+    if (sampleName.includes('tulsi')) sampleImg = '/images/herbs/tulsi.jpg';
+    else if (sampleName.includes('neem')) sampleImg = '/images/herbs/neem.jpg';
+    else if (sampleName.includes('castor')) sampleImg = '/images/herbs/castor.jpg';
+    else if (sampleName.includes('datura')) sampleImg = '/images/herbs/datura.jpg';
+    else if (sampleName.includes('brahmi')) sampleImg = '/images/herbs/brahmi.jpg';
+
     setSelectedFile(dummyFile);
-    setPreviewUrl(
-      sampleName.includes('castor')
-        ? 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80'
-        : sampleName.includes('datura')
-        ? 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80'
-        : 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=80'
-    );
+    setPreviewUrl(sampleImg);
     handleScan(dummyFile);
   };
 
