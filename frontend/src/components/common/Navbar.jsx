@@ -14,13 +14,17 @@ import {
   Sparkles,
   LogOut,
   Shield,
-  ChevronDown
+  ChevronDown,
+  Clock,
+  Utensils,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [ayurvedaDropdownOpen, setAyurvedaDropdownOpen] = useState(false);
 
   const { user, isAuthenticated, logout, hasRole } = useAuth();
   const navigate = useNavigate();
@@ -32,8 +36,8 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: 'Ayurveda', path: '/ayurveda', icon: Sparkles },
     { name: 'Herbs & Plants', path: '/herbs', icon: Leaf },
+    { name: 'Formulations', path: '/remedies', icon: Sparkles },
     { name: 'Yoga', path: '/yoga', icon: SunMedium },
     { name: 'Meditation', path: '/meditation', icon: SunMedium },
     { name: 'Doctors', path: '/doctors', icon: Stethoscope },
@@ -42,163 +46,228 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#fafaf7]/90 backdrop-blur-md border-b border-ayur-100 transition-all">
+    <header className="sticky top-0 z-50 bg-[#fafaf7]/95 backdrop-blur-md border-b border-earth-100 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-ayur-700 to-ayur-500 flex items-center justify-center text-white shadow-md shadow-ayur-900/10 group-hover:scale-105 transition-transform">
+          <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-emerald-800 to-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-900/10 group-hover:scale-105 transition-transform">
               <Leaf className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-serif text-2xl font-bold tracking-tight text-ayur-900">
-                Ayur<span className="text-ayur-600 font-normal">Vana</span>
+              <span className="font-serif text-2xl font-bold tracking-tight text-earth-950">
+                Ayur<span className="text-emerald-700 font-normal">Vana</span>
               </span>
-              <span className="block text-[10px] tracking-widest uppercase font-semibold text-earth-600 -mt-1">
+              <span className="block text-[10px] tracking-widest uppercase font-semibold text-emerald-800/80 -mt-1">
                 Ancient Wisdom • Modern Wellness
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden xl:flex items-center gap-1">
+            {/* Ayurveda Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setAyurvedaDropdownOpen(!ayurvedaDropdownOpen)}
+                onMouseEnter={() => setAyurvedaDropdownOpen(true)}
+                className="px-3 py-2 rounded-xl text-xs font-bold text-earth-900 hover:text-emerald-800 hover:bg-earth-100/60 transition-all flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+                Ayurveda Hub
+                <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+              </button>
+
+              {ayurvedaDropdownOpen && (
+                <div
+                  onMouseLeave={() => setAyurvedaDropdownOpen(false)}
+                  className="absolute left-0 mt-1 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 space-y-1"
+                >
+                  <Link
+                    to="/ayurveda"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <BookOpen className="w-4 h-4 text-emerald-700" />
+                    Principles & Philosophy
+                  </Link>
+                  <Link
+                    to="/ayurveda/quiz"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-600" />
+                    Prakriti Dosha Quiz
+                  </Link>
+                  <Link
+                    to="/ayurveda/dinacharya"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <Clock className="w-4 h-4 text-blue-600" />
+                    Dinacharya Daily Planner
+                  </Link>
+                  <Link
+                    to="/ayurveda/diet-guide"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <Utensils className="w-4 h-4 text-emerald-600" />
+                    Diet & Food Chart
+                  </Link>
+                </div>
+              )}
+            </div>
+
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
                 to={link.path}
                 className={({ isActive }) => `
-                  px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5
+                  px-2.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5
                   ${isActive 
-                    ? 'text-ayur-800 bg-ayur-100 font-semibold' 
-                    : 'text-gray-600 hover:text-ayur-800 hover:bg-ayur-50'
+                    ? 'text-emerald-900 bg-emerald-100/70 font-bold' 
+                    : 'text-earth-900 hover:text-emerald-800 hover:bg-earth-100/60'
                   }
                 `}
               >
                 {link.name}
               </NavLink>
             ))}
+
+            <NavLink
+              to="/faq"
+              className={({ isActive }) => `
+                px-2.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5
+                ${isActive 
+                  ? 'text-emerald-900 bg-emerald-100/70 font-bold' 
+                  : 'text-earth-900 hover:text-emerald-800 hover:bg-earth-100/60'
+                }
+              `}
+            >
+              FAQs
+            </NavLink>
           </nav>
 
           {/* Right Action Icons */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2">
             <Link
               to="/search"
               aria-label="Search"
-              className="p-2.5 rounded-full text-gray-600 hover:text-ayur-800 hover:bg-ayur-50 transition-colors"
+              className="p-2 rounded-full text-gray-600 hover:text-emerald-800 hover:bg-earth-100/60 transition-colors"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-4 h-4" />
             </Link>
 
             <Link
               to="/favorites"
               aria-label="Saved Favorites"
-              className="p-2.5 rounded-full text-gray-600 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+              className="p-2 rounded-full text-gray-600 hover:text-rose-600 hover:bg-rose-50 transition-colors"
             >
-              <Heart className="w-5 h-5" />
+              <Heart className="w-4 h-4" />
             </Link>
 
-            {/* Authentication Action / User Menu */}
+            {/* User Dropdown */}
             {isAuthenticated ? (
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-ayur-100/80 border border-ayur-200 text-xs font-semibold text-ayur-900 hover:bg-ayur-200/70 transition-all"
+                  className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full bg-emerald-100/60 border border-emerald-200/80 text-emerald-950 text-xs font-bold hover:bg-emerald-100 transition-all"
                 >
-                  <div className="w-6 h-6 rounded-full bg-ayur-700 text-white flex items-center justify-center text-[10px] font-bold">
-                    {user.fullName.charAt(0)}
+                  <div className="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-serif text-xs">
+                    {user?.fullName ? user.fullName[0].toUpperCase() : 'U'}
                   </div>
-                  <span className="max-w-[100px] truncate">{user.fullName.split(' ')[0]}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+                  <span className="max-w-[100px] truncate">{user?.fullName?.split(' ')[0]}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-emerald-800" />
                 </button>
 
-                {/* Dropdown Menu */}
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="px-4 py-2 border-b border-gray-100 text-xs space-y-0.5">
-                      <p className="font-bold text-gray-900">{user.fullName}</p>
-                      <p className="text-gray-500 truncate">{user.email}</p>
-                      <div className="pt-1 flex gap-1">
-                        {user.roles?.map((r) => (
-                          <span key={r} className="px-1.5 py-0.5 rounded bg-ayur-50 text-[9px] font-bold text-ayur-800 border border-ayur-100">
-                            {r.replace('ROLE_', '')}
-                          </span>
-                        ))}
-                      </div>
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-xs font-bold text-gray-900 truncate">{user?.fullName}</p>
+                      <p className="text-[11px] text-gray-500 truncate">{user?.email}</p>
                     </div>
 
                     <Link
                       to="/profile"
                       onClick={() => setUserDropdownOpen(false)}
-                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50"
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-sand-50"
                     >
-                      My Profile
-                    </Link>
-
-                    <Link
-                      to="/favorites"
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50"
-                    >
-                      Saved Favorites
+                      <User className="w-4 h-4 text-emerald-700" />
+                      My Health Profile
                     </Link>
 
                     <Link
                       to="/appointments"
                       onClick={() => setUserDropdownOpen(false)}
-                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 font-medium text-blue-900"
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-sand-50"
                     >
+                      <Stethoscope className="w-4 h-4 text-emerald-700" />
                       My Appointments
                     </Link>
 
-                    {hasRole('DOCTOR') && (
+                    {hasRole('ROLE_DOCTOR') && (
                       <Link
                         to="/doctor/dashboard"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="block px-4 py-2 text-xs text-blue-700 hover:bg-blue-50 font-medium"
+                        className="flex items-center gap-2 px-4 py-2 text-xs text-emerald-800 font-bold hover:bg-emerald-50"
                       >
-                        Doctor Consultation Dashboard
+                        <Shield className="w-4 h-4 text-emerald-700" />
+                        Doctor Console
                       </Link>
                     )}
 
-                    {hasRole('ADMIN') && (
+                    {hasRole('ROLE_ADMIN') && (
                       <Link
                         to="/admin/dashboard"
                         onClick={() => setUserDropdownOpen(false)}
-                        className="block px-4 py-2 text-xs text-purple-700 hover:bg-purple-50 font-medium"
+                        className="flex items-center gap-2 px-4 py-2 text-xs text-amber-900 font-bold hover:bg-amber-50"
                       >
-                        Admin Portal
+                        <Shield className="w-4 h-4 text-amber-700" />
+                        Admin Governance
                       </Link>
                     )}
 
-                    <div className="border-t border-gray-100 mt-1 pt-1">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 flex items-center gap-1.5 font-medium"
-                      >
-                        <LogOut className="w-3.5 h-3.5" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 border-t border-gray-100 mt-1"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ayur-800 text-white text-sm font-medium hover:bg-ayur-700 shadow-sm hover:shadow transition-all"
-              >
-                <User className="w-4 h-4" />
-                <span>Sign In</span>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="px-3.5 py-1.5 rounded-full text-xs font-bold text-earth-900 hover:bg-earth-100 transition-all"
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-1.5 rounded-full bg-emerald-800 text-white text-xs font-bold hover:bg-emerald-900 shadow-sm transition-all"
+                >
+                  Join AyurVana
+                </Link>
+              </div>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Menu Toggle Button */}
+          <div className="flex xl:hidden items-center gap-2">
+            <Link
+              to="/search"
+              aria-label="Search"
+              className="p-2 rounded-full text-gray-600 hover:bg-earth-100"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none"
-              aria-label="Toggle menu"
+              className="p-2 rounded-xl text-earth-950 hover:bg-earth-100"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -206,45 +275,121 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-ayur-100 bg-[#fafaf7] px-4 pt-2 pb-6 space-y-1 shadow-lg animate-in slide-in-from-top duration-200">
-          {navLinks.map((link) => (
+        <div className="xl:hidden bg-white border-b border-gray-200 px-4 pt-3 pb-6 space-y-3">
+          <div className="space-y-1">
             <Link
-              key={link.name}
-              to={link.path}
+              to="/ayurveda"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2.5 rounded-lg text-base font-medium text-gray-700 hover:text-ayur-900 hover:bg-ayur-50"
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
             >
-              <div className="flex items-center gap-3">
-                <link.icon className="w-5 h-5 text-ayur-600" />
-                <span>{link.name}</span>
-              </div>
+              🌿 Ayurveda Knowledge Hub
             </Link>
-          ))}
-          <div className="pt-4 border-t border-gray-200 flex gap-2">
+            <Link
+              to="/ayurveda/quiz"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-emerald-800 hover:bg-sand-50"
+            >
+              ✨ Dosha Prakriti Quiz
+            </Link>
+            <Link
+              to="/ayurveda/dinacharya"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-blue-800 hover:bg-sand-50"
+            >
+              ⏰ Dinacharya Circadian Planner
+            </Link>
+            <Link
+              to="/ayurveda/diet-guide"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-900 hover:bg-sand-50"
+            >
+              🥗 Ayurvedic Diet & Food Chart
+            </Link>
+            <Link
+              to="/remedies"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-amber-900 hover:bg-sand-50"
+            >
+              🍯 Classical Formulations (Remedies)
+            </Link>
+            <Link
+              to="/herbs"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              🌱 Herb & Botanical Library
+            </Link>
+            <Link
+              to="/yoga"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              🧘 Yoga Asana Sanctuary
+            </Link>
+            <Link
+              to="/meditation"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              🌬️ Guided Meditation & Pranayama
+            </Link>
+            <Link
+              to="/doctors"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              🩺 Consult Ayurvedic Doctors
+            </Link>
+            <Link
+              to="/scanner"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              📷 AI Plant Scanner
+            </Link>
+            <Link
+              to="/faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
+            >
+              ❓ Help & FAQs
+            </Link>
+          </div>
+
+          <div className="border-t border-gray-100 pt-3 flex flex-col gap-2">
             {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="flex-1 text-center py-2.5 rounded-lg bg-rose-600 text-white text-sm font-medium"
-              >
-                Sign Out ({user.fullName.split(' ')[0]})
-              </button>
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 rounded-xl bg-sand-100 text-earth-950 font-bold text-xs"
+                >
+                  My Profile ({user?.fullName})
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-center py-2.5 rounded-xl bg-rose-50 text-rose-600 font-bold text-xs"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <>
                 <Link
-                  to="/favorites"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 text-center py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700"
-                >
-                  Favorites
-                </Link>
-                <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 text-center py-2.5 rounded-lg bg-ayur-800 text-white text-sm font-medium"
+                  className="w-full text-center py-2.5 rounded-xl bg-sand-100 text-earth-950 font-bold text-xs"
                 >
-                  Sign In
+                  Log In
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 rounded-xl bg-emerald-800 text-white font-bold text-xs"
+                >
+                  Join AyurVana
                 </Link>
               </>
             )}

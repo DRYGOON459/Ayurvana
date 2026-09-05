@@ -9,6 +9,10 @@ import Home from './pages/Home';
 import AyurvedaHub from './pages/Ayurveda/AyurvedaHub';
 import AyurvedaTopicDetail from './pages/Ayurveda/AyurvedaTopicDetail';
 import DoshaQuiz from './pages/Ayurveda/DoshaQuiz';
+import DinacharyaPlanner from './pages/Ayurveda/DinacharyaPlanner';
+import DietGuide from './pages/Ayurveda/DietGuide';
+
+import ClassicalRemedies from './pages/Remedies/ClassicalRemedies';
 
 import HerbList from './pages/Herbs/HerbList';
 import HerbDetail from './pages/Herbs/HerbDetail';
@@ -20,6 +24,8 @@ import MeditationHub from './pages/Meditation/MeditationHub';
 
 import ArticleList from './pages/Articles/ArticleList';
 import ArticleDetail from './pages/Articles/ArticleDetail';
+
+import FaqPage from './pages/Help/FaqPage';
 
 import SearchPage from './pages/Search/SearchPage';
 import Login from './pages/Login';
@@ -39,13 +45,13 @@ import ConsultationRoom from './pages/Consultation/ConsultationRoom';
 import DoctorDashboard from './pages/Dashboard/DoctorDashboard';
 import AdminDashboard from './pages/Dashboard/AdminDashboard';
 
-// Future Phases Placeholders
+// 404 Fallback
 const PlaceholderPage = ({ title, description }) => (
   <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
-    <div className="w-16 h-16 rounded-full bg-ayur-100 text-ayur-700 mx-auto flex items-center justify-center font-serif text-2xl font-bold">
+    <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center font-serif text-2xl font-bold">
       🌿
     </div>
-    <h1 className="font-serif text-3xl font-bold text-ayur-900">{title}</h1>
+    <h1 className="font-serif text-3xl font-bold text-earth-900">{title}</h1>
     <p className="text-gray-600 max-w-md mx-auto text-sm">{description}</p>
   </div>
 );
@@ -72,6 +78,11 @@ export default function App() {
               <Route path="/ayurveda" element={<AyurvedaHub />} />
               <Route path="/ayurveda/topics/:slug" element={<AyurvedaTopicDetail />} />
               <Route path="/ayurveda/quiz" element={<DoshaQuiz />} />
+              <Route path="/ayurveda/dinacharya" element={<DinacharyaPlanner />} />
+              <Route path="/ayurveda/diet-guide" element={<DietGuide />} />
+
+              {/* Classical Formulations & Remedies */}
+              <Route path="/remedies" element={<ClassicalRemedies />} />
 
               {/* Herb & Botanical Encyclopedia */}
               <Route path="/herbs" element={<HerbList />} />
@@ -84,12 +95,16 @@ export default function App() {
               {/* Meditation & Pranayama */}
               <Route path="/meditation" element={<MeditationHub />} />
 
-              {/* Wellness Articles */}
+              {/* Wellness & Research Articles */}
               <Route path="/articles" element={<ArticleList />} />
               <Route path="/articles/:slug" element={<ArticleDetail />} />
 
+              {/* Patient Support & FAQs */}
+              <Route path="/faq" element={<FaqPage />} />
+
               {/* Plant Scanner */}
               <Route path="/scanner" element={<PlantScanner />} />
+
               {/* Doctor Directory & Profiles */}
               <Route path="/doctors" element={<DoctorList />} />
               <Route path="/doctors/:id" element={<DoctorDetail />} />
@@ -101,6 +116,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+
               {/* Protected User Dashboard Routes */}
               <Route
                 path="/favorites"
@@ -134,6 +150,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+
               {/* Doctor Consultation Console */}
               <Route
                 path="/doctor/dashboard"
@@ -143,6 +160,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+
               {/* Admin Governance Portal */}
               <Route
                 path="/admin/dashboard"
@@ -152,6 +170,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+
               <Route path="*" element={<PlaceholderPage title="404 - Page Not Found" description="The page you are looking for does not exist." />} />
             </Routes>
           </main>
