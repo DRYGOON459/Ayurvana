@@ -117,6 +117,133 @@ const classicalFormulations = [
     anupana: 'Cold water or coconut water.'
   },
   {
+    id: 'ashwagandharishta',
+    name: 'Aśvagandhāriṣṭa (अश्वगन्धारिष्ट)',
+    englishName: 'Fermented Nervine & Vitality Tonic',
+    category: 'Mind & Memory',
+    form: 'Naturally Fermented Herbal Elixir (Arishta)',
+    primaryDosha: 'Pacifies Vata; builds Ojas',
+    classicalSource: 'Bhaishajya Ratnavali, Murcha Chikitsa',
+    description: 'A deeply nourishing fermented tonic combining Ashwagandha with Musli, Manjistha, and Haridra to soothe exhausted nerves and rebuild physical stamina.',
+    ingredients: [
+      { herb: 'Ashwagandha (Withania somnifera)', part: 'Roots (Decoction base)', role: 'Nervine strengthener, HPA-axis stabilizer' },
+      { herb: 'Safed Musli & Manjistha', part: 'Roots', role: 'Anabolic vitality and blood purification' },
+      { herb: 'Dhataki Flowers (Woodfordia fruticosa)', part: 'Flowers', role: 'Natural fermentation catalyst generating 5-10% self-generated alcohol' }
+    ],
+    indications: ['Chronic fatigue syndrome', 'Insomnia due to mental exhaustion', 'General emaciation', 'Fibromyalgia', 'Anxiety neurosis'],
+    dosage: '15–25 ml with equal quantity of lukewarm water twice daily after meals.',
+    anupana: 'Lukewarm water.'
+  },
+  {
+    id: 'arjunarishta',
+    name: 'Arjunāriṣṭa / Parthādyāriṣṭa (पार्थाद्यारिष्ट)',
+    englishName: 'Cardioprotective Fermented Heart Tonic',
+    category: 'Cardiovascular',
+    form: 'Naturally Fermented Herbal Elixir (Arishta)',
+    primaryDosha: 'Balances Pitta & Kapha in heart channels',
+    classicalSource: 'Bhaishajya Ratnavali, Hridroga Chikitsa',
+    description: 'Premier liquid cardiotonic prepared from Terminalia arjuna bark, Mridvika (dry grapes), and Madhuka flowers to strengthen heart muscle.',
+    ingredients: [
+      { herb: 'Arjuna Bark (Terminalia arjuna)', part: 'Stem bark (Decoction base)', role: 'Myocardial inotrope & endothelial protection' },
+      { herb: 'Draksha (Vitis vinifera)', part: 'Dry raisins', role: 'Cardiac nourishment and antioxidant tannins' },
+      { herb: 'Madhuka (Madhuca indica)', part: 'Flowers', role: 'Cardiotonic sweet fermenter' }
+    ],
+    indications: ['Cardiac arrhythmia & palpitations', 'Hypertension support', 'Post-myocardial rehabilitation', 'Angina discomfort', 'Shortness of breath on exertion'],
+    dosage: '15–20 ml mixed with equal water immediately following meals.',
+    anupana: 'Water.'
+  },
+  {
+    id: 'kanchanar-guggulu',
+    name: 'Kāñcanāra Guggulu (काञ्चनार गुग्गुलु)',
+    englishName: 'Lymphatic & Glandular Swelling Detox Tablet',
+    category: 'Women & Hormones',
+    form: 'Herbomineral Resin Tablet (Guggulu Vati)',
+    primaryDosha: 'Pacifies Kapha & scrapes deep metabolic Ama',
+    classicalSource: 'Sharangadhara Samhita, Madhyama Khanda Chapter 7',
+    description: 'The supreme Ayurvedic formulation for lymphatic cysts, thyroid nodule balance, PCOS ovarian cysts, and benign glandular enlargements.',
+    ingredients: [
+      { herb: 'Kanchanar Bark (Bauhinia variegata)', part: 'Stem bark (16 parts)', role: 'Specific affinity for thyroid and lymphatic nodes' },
+      { herb: 'Shuddha Guggulu (Commiphora mukul)', part: 'Purified resin (Equal parts)', role: 'Scrapes cystic Ama (Lekhana)' },
+      { herb: 'Triphala & Trikatu & Varuna', part: 'Herbal blend', role: 'Metabolic decongestion and diuretic clearance' }
+    ],
+    indications: ['PCOS & ovarian cysts', 'Hypothyroidism & goiter', 'Lymphadenitis & swollen glands', 'Lipomas & non-malignant fibroids', 'Endometriosis support'],
+    dosage: '2 tablets (500mg each) twice daily after meals.',
+    anupana: 'Warm water or Kanchanar bark decoction.'
+  },
+  {
+    id: 'yogaraj-guggulu',
+    name: 'Yogarāja Guggulu (योगराज गुग्गुलु)',
+    englishName: 'Supreme Joint & Arthritic Vata Relief Tablet',
+    category: 'Joints & Mobility',
+    form: 'Guggulu Tablet',
+    primaryDosha: 'Supreme Vata Shamaka',
+    classicalSource: 'Bhaishajya Ratnavali, Vatavyadhi Chikitsa',
+    description: 'A master synergy of 28 herbs processed in purified Guggulu resin to clear deep-seated Ama toxins from synovial joint capsules.',
+    ingredients: [
+      { herb: 'Shuddha Guggulu', part: 'Purified Oleo-resin', role: 'Joint anti-inflammatory and tissue penetration' },
+      { herb: 'Chitrak & Pippali & Ajwain', part: 'Digestive spices', role: 'Burns systemic joint Ama (Amavata)' },
+      { herb: 'Rasna & Gokshura', part: 'Roots', role: 'Musculoskeletal strength and pain relief' }
+    ],
+    indications: ['Osteoarthritis & Rheumatoid arthritis', 'Ankylosing spondylitis', 'Sciatica & lower back stiffness', 'Gouty arthritis', 'Fibromyalgia'],
+    dosage: '2 tablets (500mg each) twice or thrice daily.',
+    anupana: 'Warm water, Maharasnadi Kwath, or warm milk.'
+  },
+  {
+    id: 'chandraprabha-vati',
+    name: 'Candraprabhā Vaṭī (चन्द्रप्रभा वटी)',
+    englishName: 'Moonlight Vitality & Genito-Urinary Tablet',
+    category: 'Urinary & Kidney',
+    form: 'Herbomineral Tablet (Vati)',
+    primaryDosha: 'Tridosha Shamaka',
+    classicalSource: 'Sharangadhara Samhita, Madhyama Khanda Chapter 7',
+    description: 'Named "Chandraprabha" (Lustre of the Moon) because it brings radiant tranquility to the pelvic floor, kidneys, and reproductive system.',
+    ingredients: [
+      { herb: 'Shilajit (Purified Asphaltum)', part: 'Exudate', role: 'Cellular rejuvenator, fulvic acid carrier' },
+      { herb: 'Guggulu & Musta', part: 'Resin & Tubers', role: 'Urinary channel anti-inflammatory' },
+      { herb: 'Gokshura & Punarnava', part: 'Roots', role: 'Diuretic, kidney tonifier' },
+      { herb: 'Loha Bhasma (Purified Iron calx)', part: 'Mineral', role: 'Hematinic stamina builder' }
+    ],
+    indications: ['Urinary Tract Infections (UTIs)', 'Benign Prostatic Hyperplasia (BPH)', 'Diabetic kidney fatigue', 'Erectile debility', 'Incontinence & dysuria'],
+    dosage: '1–2 tablets twice daily after meals.',
+    anupana: 'Warm water or coconut water.'
+  },
+  {
+    id: 'arogyavardhini-vati',
+    name: 'Ārogyavardhinī Vaṭī (आरोग्यवर्धिनी वटी)',
+    englishName: 'Supreme Metabolic & Liver Enhancer',
+    category: 'Digestion & Detox',
+    form: 'Herbomineral Tablet',
+    primaryDosha: 'Pacifies Pitta & Kapha in liver and skin',
+    classicalSource: 'Rasaratna Samucchaya, Kushtharoga Chikitsa',
+    description: 'The name literally signifies "That which bestows good health". The premier formulation for sluggish liver, elevated cholesterol, and chronic skin disease.',
+    ingredients: [
+      { herb: 'Kutki (Picrorhiza kurroa)', part: 'Rhizome (22 parts - dominant)', role: 'Deep liver detoxification & bile secretion' },
+      { herb: 'Triphala & Shilajit & Guggulu', part: 'Herbal blend', role: 'Metabolic Ama scraping' },
+      { herb: 'Neem juice & Tamra Bhasma', part: 'Processing media', role: 'Blood purification & lipid metabolism' }
+    ],
+    indications: ['Fatty Liver Disease (NAFLD)', 'Elevated liver enzymes (ALT/AST)', 'Psoriasis, eczema & acne', 'Chronic constipation with biliary stasis', 'High LDL cholesterol'],
+    dosage: '1–2 tablets (250–500mg) twice daily after meals.',
+    anupana: 'Warm water, honey water, or Punarnavadi Kashayam.'
+  },
+  {
+    id: 'anu-taila',
+    name: 'Aṇu Taila (अणु तैल)',
+    englishName: 'Classical Daily Nasal Rejuvenation Oil',
+    category: 'Respiratory Health',
+    form: 'Medicated Nasal Drops (Nasya Oil)',
+    primaryDosha: 'Pacifies Vata & Kapha in head/neck (Urdhwajatrugata)',
+    classicalSource: 'Charaka Samhita, Sutrasthana Chapter 5',
+    description: 'An intricate oil processed through 10 boilings with 28 herbs and goat milk to cross the cribriform plate and nourish sensory faculties.',
+    ingredients: [
+      { herb: 'Jivanti & Devadaru & Yashtimadhu', part: 'Herbal decoction', role: 'Sensory nerve tonification' },
+      { herb: 'Musta & Cardamom & Cinnamon', part: 'Aromatics', role: 'Sinus decongestion & microchannel opening' },
+      { herb: 'Pure Sesame Oil & Goat Milk', part: 'Base', role: 'Trans-nasal neural delivery' }
+    ],
+    indications: ['Chronic allergic rhinitis & sinusitis', 'Tension headaches & migraines', 'Premature graying & hair fall', 'Stiffness in neck and jaw', 'Sleep apnea'],
+    dosage: 'Instill 2–4 drops in each nostril daily in the morning following gentle steam.',
+    anupana: 'Nasal administration (Nasya) only.'
+  },
+  {
     id: 'mahanarayan-taila',
     name: 'Mahānārāyaṇa Taila (महानारायण तैल)',
     englishName: 'Classical Joint & Neuromuscular Massage Oil',
@@ -156,7 +283,7 @@ const classicalFormulations = [
   }
 ];
 
-const categories = ['All', 'Digestion & Detox', 'Immunity & Rasayana', 'Mind & Memory', 'Respiratory Health', 'Joints & Mobility', 'Skin & Beauty'];
+const categories = ['All', 'Digestion & Detox', 'Immunity & Rasayana', 'Mind & Memory', 'Respiratory Health', 'Joints & Mobility', 'Women & Hormones', 'Urinary & Kidney', 'Cardiovascular', 'Skin & Beauty'];
 
 export default function ClassicalRemedies() {
   const [selectedCat, setSelectedCat] = useState('All');
@@ -185,7 +312,7 @@ export default function ClassicalRemedies() {
             Classical Formulations & Yogas
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-base">
-            Explore time-tested polyherbal Churnas, Avalehas, Ghritas, and Tailas documented in the classical Samhitas with precise ingredients and Anupana carrier guidelines.
+            Explore time-tested polyherbal Churnas, Arishtas, Guggulus, Ghritas, Vatis, and Tailas documented in the classical Samhitas with precise ingredients and Anupana carrier guidelines.
           </p>
         </div>
 
@@ -195,7 +322,7 @@ export default function ClassicalRemedies() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search formulations by name, ailment (e.g. Acid Reflux, Cough, Arthritis, Memory), or ingredient..."
+              placeholder="Search formulations by name, ailment (e.g. Acid Reflux, Cough, Arthritis, Thyroid, Memory), or ingredient..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-sand-50 border border-gray-200 text-earth-950 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm"
@@ -250,7 +377,7 @@ export default function ClassicalRemedies() {
                 <div className="bg-sand-50/80 rounded-2xl p-4 border border-sand-200/60 space-y-2">
                   <h4 className="text-[11px] font-bold text-earth-950 uppercase tracking-wider flex items-center gap-1.5">
                     <BookOpen className="w-3.5 h-3.5 text-emerald-700" />
-                    Key Botanical Ingredients & Pharmacology
+                    Key Botanical Ingredients &amp; Pharmacology
                   </h4>
                   <ul className="space-y-1.5">
                     {item.ingredients.map((ing, idx) => (

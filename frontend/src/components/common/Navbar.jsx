@@ -17,6 +17,9 @@ import {
   ChevronDown,
   Clock,
   Utensils,
+  Eye,
+  HeartPulse,
+  Calendar,
   HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -66,7 +69,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center gap-1">
-            {/* Ayurveda Dropdown */}
+            {/* Ayurveda Clinical Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setAyurvedaDropdownOpen(!ayurvedaDropdownOpen)}
@@ -81,7 +84,7 @@ export default function Navbar() {
               {ayurvedaDropdownOpen && (
                 <div
                   onMouseLeave={() => setAyurvedaDropdownOpen(false)}
-                  className="absolute left-0 mt-1 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 space-y-1"
+                  className="absolute left-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 space-y-1"
                 >
                   <Link
                     to="/ayurveda"
@@ -89,7 +92,7 @@ export default function Navbar() {
                     className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
                   >
                     <BookOpen className="w-4 h-4 text-emerald-700" />
-                    Principles & Philosophy
+                    Principles &amp; Samhitas
                   </Link>
                   <Link
                     to="/ayurveda/quiz"
@@ -97,7 +100,7 @@ export default function Navbar() {
                     className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
                   >
                     <Sparkles className="w-4 h-4 text-amber-600" />
-                    Prakriti Dosha Quiz
+                    Prakriti Dosha Assessment
                   </Link>
                   <Link
                     to="/ayurveda/dinacharya"
@@ -105,7 +108,15 @@ export default function Navbar() {
                     className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
                   >
                     <Clock className="w-4 h-4 text-blue-600" />
-                    Dinacharya Daily Planner
+                    Dinacharya Circadian Clock
+                  </Link>
+                  <Link
+                    to="/ayurveda/ritucharya"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <Calendar className="w-4 h-4 text-teal-600" />
+                    Ritucharya Seasonal Living
                   </Link>
                   <Link
                     to="/ayurveda/diet-guide"
@@ -113,7 +124,23 @@ export default function Navbar() {
                     className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
                   >
                     <Utensils className="w-4 h-4 text-emerald-600" />
-                    Diet & Food Chart
+                    Diet &amp; 6 Tastes Food Chart
+                  </Link>
+                  <Link
+                    to="/ayurveda/tongue-diagnosis"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <Eye className="w-4 h-4 text-purple-600" />
+                    Tongue Diagnosis (Jihvā)
+                  </Link>
+                  <Link
+                    to="/ayurveda/nadi-pariksha"
+                    onClick={() => setAyurvedaDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-earth-950 hover:bg-sand-50"
+                  >
+                    <HeartPulse className="w-4 h-4 text-rose-600" />
+                    Pulse Diagnosis (Nāḍī)
                   </Link>
                 </div>
               )}
@@ -291,7 +318,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-xl text-sm font-bold text-emerald-800 hover:bg-sand-50"
             >
-              ✨ Dosha Prakriti Quiz
+              ✨ Dosha Prakriti Assessment
             </Link>
             <Link
               to="/ayurveda/dinacharya"
@@ -301,11 +328,32 @@ export default function Navbar() {
               ⏰ Dinacharya Circadian Planner
             </Link>
             <Link
+              to="/ayurveda/ritucharya"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-teal-800 hover:bg-sand-50"
+            >
+              📅 Ritucharya Seasonal Living
+            </Link>
+            <Link
               to="/ayurveda/diet-guide"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-900 hover:bg-sand-50"
             >
-              🥗 Ayurvedic Diet & Food Chart
+              🥗 Ayurvedic Diet &amp; Food Chart
+            </Link>
+            <Link
+              to="/ayurveda/tongue-diagnosis"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-purple-800 hover:bg-sand-50"
+            >
+              👅 Tongue Diagnosis (Jihva)
+            </Link>
+            <Link
+              to="/ayurveda/nadi-pariksha"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-xl text-sm font-bold text-rose-800 hover:bg-sand-50"
+            >
+              💓 Pulse Diagnosis (Nadi)
             </Link>
             <Link
               to="/remedies"
@@ -319,7 +367,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
             >
-              🌱 Herb & Botanical Library
+              🌱 Herb &amp; Botanical Library
             </Link>
             <Link
               to="/yoga"
@@ -333,7 +381,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
             >
-              🌬️ Guided Meditation & Pranayama
+              🌬️ Guided Meditation &amp; Pranayama
             </Link>
             <Link
               to="/doctors"
@@ -354,7 +402,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-xl text-sm font-bold text-earth-950 hover:bg-sand-50"
             >
-              ❓ Help & FAQs
+              ❓ Help &amp; FAQs
             </Link>
           </div>
 

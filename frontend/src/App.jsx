@@ -11,6 +11,9 @@ import AyurvedaTopicDetail from './pages/Ayurveda/AyurvedaTopicDetail';
 import DoshaQuiz from './pages/Ayurveda/DoshaQuiz';
 import DinacharyaPlanner from './pages/Ayurveda/DinacharyaPlanner';
 import DietGuide from './pages/Ayurveda/DietGuide';
+import TongueDiagnosis from './pages/Ayurveda/TongueDiagnosis';
+import NadiPariksha from './pages/Ayurveda/NadiPariksha';
+import RitucharyaGuide from './pages/Ayurveda/RitucharyaGuide';
 
 import ClassicalRemedies from './pages/Remedies/ClassicalRemedies';
 
@@ -74,12 +77,15 @@ export default function App() {
               {/* Universal Search */}
               <Route path="/search" element={<SearchPage />} />
 
-              {/* Ayurveda Knowledge Center */}
+              {/* Ayurveda Knowledge Center & Diagnostic Tools */}
               <Route path="/ayurveda" element={<AyurvedaHub />} />
               <Route path="/ayurveda/topics/:slug" element={<AyurvedaTopicDetail />} />
               <Route path="/ayurveda/quiz" element={<DoshaQuiz />} />
               <Route path="/ayurveda/dinacharya" element={<DinacharyaPlanner />} />
               <Route path="/ayurveda/diet-guide" element={<DietGuide />} />
+              <Route path="/ayurveda/tongue-diagnosis" element={<TongueDiagnosis />} />
+              <Route path="/ayurveda/nadi-pariksha" element={<NadiPariksha />} />
+              <Route path="/ayurveda/ritucharya" element={<RitucharyaGuide />} />
 
               {/* Classical Formulations & Remedies */}
               <Route path="/remedies" element={<ClassicalRemedies />} />
