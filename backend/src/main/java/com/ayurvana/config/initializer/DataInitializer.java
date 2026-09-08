@@ -27,7 +27,16 @@ public class DataInitializer implements CommandLineRunner {
         private final UserRepository userRepository;
         private final DoctorProfileRepository doctorProfileRepository;
         private final ProductRepository productRepository;
+        private final RecipeRepository recipeRepository;
+        private final DoshaQuizQuestionRepository doshaQuizQuestionRepository;
         private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+        private final HerbDataSeeder herbDataSeeder;
+        private final ProductDataSeeder productDataSeeder;
+        private final RecipeDataSeeder recipeDataSeeder;
+        private final DoshaQuizDataSeeder doshaQuizDataSeeder;
+        private final YogaMeditationDataSeeder yogaMeditationDataSeeder;
+        private final AyurvedaKnowledgeDataSeeder ayurvedaKnowledgeDataSeeder;
 
         @Override
         @Transactional
@@ -36,13 +45,13 @@ public class DataInitializer implements CommandLineRunner {
                 seedRoles();
                 seedUsers();
                 seedDoctors();
-                seedHerbs();
-                seedYogaPoses();
-                seedMeditations();
-                seedAyurvedaTopics();
-                seedArticles();
-                seedProducts();
-                log.info("AyurVana database populated with comprehensive Ayurvedic clinical encyclopedia and pharmacy store.");
+                herbDataSeeder.seedHerbs();
+                productDataSeeder.seedProducts();
+                recipeDataSeeder.seedRecipes();
+                doshaQuizDataSeeder.seedQuizQuestions();
+                yogaMeditationDataSeeder.seedYogaAndMeditation();
+                ayurvedaKnowledgeDataSeeder.seedKnowledge();
+                log.info("AyurVana database populated with comprehensive Ayurvedic clinical encyclopedia, pharmacy store, recipes, and Prakriti assessment engine.");
         }
 
         private void seedRoles() {
