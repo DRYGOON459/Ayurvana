@@ -1,67 +1,37 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Relational Database Service
   postgres:
-    image: postgres:15-alpine
-    container_name: ayurvana_postgres
-    restart: unless-stopped
+    image: postgres:16-alpine
+    container_name: ayurvana-postgres
+    restart: always
     environment:
       POSTGRES_DB: ayurvana
-      POSTGRES_USER: ayurvana_user
-      POSTGRES_PASSWORD: ayurvana_secure_password_2026
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ayurvana_user -d ayurvana"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ayurvana"]
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - ayurvana_network
 
-  # Spring Boot Backend Service
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: ayurvana_backend
-    restart: unless-stopped
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ayurvana-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ayurvana.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - "5050:80"
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      DATABASE_URL: jdbc:postgresql://postgres:5432/ayurvana
-      DATABASE_USERNAME: ayurvana_user
-      DATABASE_PASSWORD: ayurvana_secure_password_2026
-      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      ALLOWED_ORIGINS: http://localhost,http://localhost:80,http://localhost:5173
-    ports:
-      - "8080:8080"
-    networks:
-      - ayurvana_network
-
-  # React Frontend + Nginx Web Server
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: ayurvana_frontend
-    restart: unless-stopped
-    depends_on:
-      - backend
-    ports:
-      - "80:80"
-    networks:
-      - ayurvana_network
 
 volumes:
   postgres_data:
     driver: local
-
-networks:
-  ayurvana_network:
-    driver: bridge
