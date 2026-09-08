@@ -18,4 +18,8 @@ public class UpdateProfileRequest {
     private String phoneNumber;
 
     private String avatarUrl;
+
+    private String bio;
+
+    private com.ayurvana.model.enums.DoshaType doshaType;
 }
