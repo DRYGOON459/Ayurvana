@@ -31,15 +31,7 @@ public class RecipeController {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<RecipeSummaryResponse> paged = recipeService.getAllRecipes(pageable);
-        PagedResponse<RecipeSummaryResponse> response = PagedResponse.<RecipeSummaryResponse>builder()
-                .content(paged.getContent())
-                .pageNumber(paged.getNumber())
-                .pageSize(paged.getSize())
-                .totalElements(paged.getTotalElements())
-                .totalPages(paged.getTotalPages())
-                .last(paged.isLast())
-                .build();
-        return ResponseEntity.ok(ApiResponse.success(response, "Ayurvedic recipes retrieved successfully"));
+        return ResponseEntity.ok(ApiResponse.success(PagedResponse.from(paged), "Ayurvedic recipes retrieved successfully"));
     }
 
     @GetMapping("/{slug}")
@@ -56,15 +48,7 @@ public class RecipeController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
         Page<RecipeSummaryResponse> paged = recipeService.getRecipesByDosha(dosha, pageable);
-        PagedResponse<RecipeSummaryResponse> response = PagedResponse.<RecipeSummaryResponse>builder()
-                .content(paged.getContent())
-                .pageNumber(paged.getNumber())
-                .pageSize(paged.getSize())
-                .totalElements(paged.getTotalElements())
-                .totalPages(paged.getTotalPages())
-                .last(paged.isLast())
-                .build();
-        return ResponseEntity.ok(ApiResponse.success(response, "Recipes by Dosha retrieved successfully"));
+        return ResponseEntity.ok(ApiResponse.success(PagedResponse.from(paged), "Recipes by Dosha retrieved successfully"));
     }
 
     @GetMapping("/meal-type/{mealType}")
@@ -75,15 +59,7 @@ public class RecipeController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
         Page<RecipeSummaryResponse> paged = recipeService.getRecipesByMealType(mealType, pageable);
-        PagedResponse<RecipeSummaryResponse> response = PagedResponse.<RecipeSummaryResponse>builder()
-                .content(paged.getContent())
-                .pageNumber(paged.getNumber())
-                .pageSize(paged.getSize())
-                .totalElements(paged.getTotalElements())
-                .totalPages(paged.getTotalPages())
-                .last(paged.isLast())
-                .build();
-        return ResponseEntity.ok(ApiResponse.success(response, "Recipes by meal type retrieved successfully"));
+        return ResponseEntity.ok(ApiResponse.success(PagedResponse.from(paged), "Recipes by meal type retrieved successfully"));
     }
 
     @GetMapping("/search")
@@ -94,14 +70,6 @@ public class RecipeController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<RecipeSummaryResponse> paged = recipeService.searchRecipes(query, pageable);
-        PagedResponse<RecipeSummaryResponse> response = PagedResponse.<RecipeSummaryResponse>builder()
-                .content(paged.getContent())
-                .pageNumber(paged.getNumber())
-                .pageSize(paged.getSize())
-                .totalElements(paged.getTotalElements())
-                .totalPages(paged.getTotalPages())
-                .last(paged.isLast())
-                .build();
-        return ResponseEntity.ok(ApiResponse.success(response, "Recipe search results"));
+        return ResponseEntity.ok(ApiResponse.success(PagedResponse.from(paged), "Recipe search results"));
     }
 }

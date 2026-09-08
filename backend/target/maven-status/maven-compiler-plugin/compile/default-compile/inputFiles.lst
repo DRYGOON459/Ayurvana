@@ -17,7 +17,6 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\Plan
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\SecurityConfig.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\PlantScanController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\DoshaQuizServiceImpl.java
-C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\initializer\YogaMeditationDataSeeder.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\DoctorAvailabilityRepository.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\AyurvedaService.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\VideoConsultationController.java
@@ -110,7 +109,6 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\Herb
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\VideoConsultationServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\DoshaType.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\YogaController.java
-C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\initializer\HerbDataSeeder.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\SearchResultItem.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\AyurvedaServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\PlantScan.java
@@ -132,7 +130,6 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\WebSocketC
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\AdminServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\AdminController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\PlantScanService.java
-C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\initializer\AyurvedaKnowledgeDataSeeder.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\UserResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\HerbController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\DoshaAssessmentResultRepository.java
@@ -185,7 +182,6 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\Order
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\CorsConfig.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\FavoriteService.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\ArticleSummaryResponse.java
-C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\initializer\ProductDataSeeder.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\Appointment.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\PlantReferenceResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\PaymentTransaction.java

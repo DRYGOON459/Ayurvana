@@ -100,13 +100,17 @@ public class DoshaQuizServiceImpl implements DoshaQuizService {
         List<String> foodsAvoid = getFoodsToAvoid(primary);
         String summary = getSummary(primary, constitution);
 
+        final DoshaType finalPrimary = primary;
+        final DoshaType finalSecondary = secondary;
+        final String finalConstitution = constitution;
+
         if (userEmail != null) {
             userRepository.findByEmail(userEmail).ifPresent(user -> {
                 DoshaAssessmentResult result = DoshaAssessmentResult.builder()
                         .user(user)
-                        .primaryDosha(primary)
-                        .secondaryDosha(secondary)
-                        .prakritiConstitution(constitution)
+                        .primaryDosha(finalPrimary)
+                        .secondaryDosha(finalSecondary)
+                        .prakritiConstitution(finalConstitution)
                         .vataPercentage(vataPct)
                         .pittaPercentage(pittaPct)
                         .kaphaPercentage(kaphaPct)
@@ -117,7 +121,7 @@ public class DoshaQuizServiceImpl implements DoshaQuizService {
                         .build();
                 resultRepository.save(result);
 
-                user.setDoshaType(primary);
+                user.setDoshaType(finalPrimary);
                 userRepository.save(user);
             });
         }
