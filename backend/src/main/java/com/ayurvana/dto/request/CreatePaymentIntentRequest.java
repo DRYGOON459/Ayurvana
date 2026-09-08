@@ -20,6 +20,7 @@ public class CreatePaymentIntentRequest {
     @DecimalMin(value = "1.00", message = "Amount must be greater than or equal to 1.00")
     private BigDecimal amount;
 
+    @Builder.Default
     private String currency = "INR";
 
     @NotNull(message = "Payment method is required")

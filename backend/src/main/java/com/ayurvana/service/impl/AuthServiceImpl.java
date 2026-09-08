@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
+    private final com.ayurvana.repository.PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
     @Transactional
@@ -129,6 +130,8 @@ public class AuthServiceImpl implements AuthService {
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
                 .avatarUrl(user.getAvatarUrl())
+                .bio(user.getBio())
+                .doshaType(user.getDoshaType() != null ? user.getDoshaType().name() : null)
                 .roles(roles)
                 .active(user.isActive())
                 .build();
@@ -149,6 +152,12 @@ public class AuthServiceImpl implements AuthService {
         if (request.getAvatarUrl() != null) {
             user.setAvatarUrl(request.getAvatarUrl().trim());
         }
+        if (request.getBio() != null) {
+            user.setBio(request.getBio().trim());
+        }
+        if (request.getDoshaType() != null) {
+            user.setDoshaType(request.getDoshaType());
+        }
 
         userRepository.save(user);
 
@@ -162,8 +171,47 @@ public class AuthServiceImpl implements AuthService {
                 .fullName(user.getFullName())
                 .phoneNumber(user.getPhoneNumber())
                 .avatarUrl(user.getAvatarUrl())
+                .bio(user.getBio())
+                .doshaType(user.getDoshaType() != null ? user.getDoshaType().name() : null)
                 .roles(roles)
                 .active(user.isActive())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public String forgotPassword(com.ayurvana.dto.request.ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail().trim().toLowerCase())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
+
+        String token = java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
+        com.ayurvana.model.entity.PasswordResetToken resetToken = passwordResetTokenRepository.findByUser(user)
+                .orElse(com.ayurvana.model.entity.PasswordResetToken.builder().user(user).build());
+
+        resetToken.setToken(token);
+        resetToken.setExpiryDate(java.time.Instant.now().plusSeconds(3600));
+        resetToken.setIsUsed(false);
+
+        passwordResetTokenRepository.save(resetToken);
+        return token;
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(com.ayurvana.dto.request.ResetPasswordRequest request) {
+        String token = request.getToken() != null ? request.getToken().trim() : "";
+        com.ayurvana.model.entity.PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new com.ayurvana.exception.BadRequestException("Invalid or expired password reset token."));
+
+        if (resetToken.isExpired() || Boolean.TRUE.equals(resetToken.getIsUsed())) {
+            throw new com.ayurvana.exception.BadRequestException("Password reset token has expired or has already been used.");
+        }
+
+        User user = resetToken.getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        resetToken.setIsUsed(true);
+        passwordResetTokenRepository.save(resetToken);
     }
 }

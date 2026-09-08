@@ -1,9 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import Home from './pages/Home';
+
+// E-Commerce & Pharmacy Store Pages
+import StorePage from './pages/Store/StorePage';
+import ProductDetailPage from './pages/Store/ProductDetailPage';
+import CartPage from './pages/Store/CartPage';
+import CheckoutPage from './pages/Store/CheckoutPage';
+import MyOrders from './pages/Dashboard/MyOrders';
 
 // Knowledge Hub Pages
 import AyurvedaHub from './pages/Ayurveda/AyurvedaHub';
@@ -62,127 +70,150 @@ const PlaceholderPage = ({ title, description }) => (
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              {/* Core Home */}
-              <Route path="/" element={<Home />} />
+      <CartProvider>
+        <BrowserRouter>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                {/* Core Home */}
+                <Route path="/" element={<Home />} />
 
-              {/* Authentication */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+                {/* Authentication */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-              {/* Universal Search */}
-              <Route path="/search" element={<SearchPage />} />
+                {/* Universal Search */}
+                <Route path="/search" element={<SearchPage />} />
 
-              {/* Ayurveda Knowledge Center & Diagnostic Tools */}
-              <Route path="/ayurveda" element={<AyurvedaHub />} />
-              <Route path="/ayurveda/topics/:slug" element={<AyurvedaTopicDetail />} />
-              <Route path="/ayurveda/quiz" element={<DoshaQuiz />} />
-              <Route path="/ayurveda/dinacharya" element={<DinacharyaPlanner />} />
-              <Route path="/ayurveda/diet-guide" element={<DietGuide />} />
-              <Route path="/ayurveda/tongue-diagnosis" element={<TongueDiagnosis />} />
-              <Route path="/ayurveda/nadi-pariksha" element={<NadiPariksha />} />
-              <Route path="/ayurveda/ritucharya" element={<RitucharyaGuide />} />
+                {/* Apothecary & E-Commerce Store */}
+                <Route path="/store" element={<StorePage />} />
+                <Route path="/store/product/:slug" element={<ProductDetailPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <CheckoutPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <ProtectedRoute>
+                      <MyOrders />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Classical Formulations & Remedies */}
-              <Route path="/remedies" element={<ClassicalRemedies />} />
+                {/* Ayurveda Knowledge Center & Diagnostic Tools */}
+                <Route path="/ayurveda" element={<AyurvedaHub />} />
+                <Route path="/ayurveda/topics/:slug" element={<AyurvedaTopicDetail />} />
+                <Route path="/ayurveda/quiz" element={<DoshaQuiz />} />
+                <Route path="/ayurveda/dinacharya" element={<DinacharyaPlanner />} />
+                <Route path="/ayurveda/diet-guide" element={<DietGuide />} />
+                <Route path="/ayurveda/tongue-diagnosis" element={<TongueDiagnosis />} />
+                <Route path="/ayurveda/nadi-pariksha" element={<NadiPariksha />} />
+                <Route path="/ayurveda/ritucharya" element={<RitucharyaGuide />} />
 
-              {/* Herb & Botanical Encyclopedia */}
-              <Route path="/herbs" element={<HerbList />} />
-              <Route path="/herbs/:slug" element={<HerbDetail />} />
+                {/* Classical Formulations & Remedies */}
+                <Route path="/remedies" element={<ClassicalRemedies />} />
 
-              {/* Yoga Sanctuary */}
-              <Route path="/yoga" element={<YogaList />} />
-              <Route path="/yoga/:slug" element={<YogaDetail />} />
+                {/* Herb & Botanical Encyclopedia */}
+                <Route path="/herbs" element={<HerbList />} />
+                <Route path="/herbs/:slug" element={<HerbDetail />} />
 
-              {/* Meditation & Pranayama */}
-              <Route path="/meditation" element={<MeditationHub />} />
+                {/* Yoga Sanctuary */}
+                <Route path="/yoga" element={<YogaList />} />
+                <Route path="/yoga/:slug" element={<YogaDetail />} />
 
-              {/* Wellness & Research Articles */}
-              <Route path="/articles" element={<ArticleList />} />
-              <Route path="/articles/:slug" element={<ArticleDetail />} />
+                {/* Meditation & Pranayama */}
+                <Route path="/meditation" element={<MeditationHub />} />
 
-              {/* Patient Support & FAQs */}
-              <Route path="/faq" element={<FaqPage />} />
+                {/* Wellness & Research Articles */}
+                <Route path="/articles" element={<ArticleList />} />
+                <Route path="/articles/:slug" element={<ArticleDetail />} />
 
-              {/* Plant Scanner */}
-              <Route path="/scanner" element={<PlantScanner />} />
+                {/* Patient Support & FAQs */}
+                <Route path="/faq" element={<FaqPage />} />
 
-              {/* Doctor Directory & Profiles */}
-              <Route path="/doctors" element={<DoctorList />} />
-              <Route path="/doctors/:id" element={<DoctorDetail />} />
-              <Route
-                path="/doctors/onboarding"
-                element={
-                  <ProtectedRoute>
-                    <DoctorOnboarding />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Plant Scanner */}
+                <Route path="/scanner" element={<PlantScanner />} />
 
-              {/* Protected User Dashboard Routes */}
-              <Route
-                path="/favorites"
-                element={
-                  <ProtectedRoute>
-                    <FavoritesDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <UserProfile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/appointments"
-                element={
-                  <ProtectedRoute>
-                    <MyAppointments />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/consultation/:appointmentId"
-                element={
-                  <ProtectedRoute>
-                    <ConsultationRoom />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Doctor Directory & Profiles */}
+                <Route path="/doctors" element={<DoctorList />} />
+                <Route path="/doctors/:id" element={<DoctorDetail />} />
+                <Route
+                  path="/doctors/onboarding"
+                  element={
+                    <ProtectedRoute>
+                      <DoctorOnboarding />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Doctor Consultation Console */}
-              <Route
-                path="/doctor/dashboard"
-                element={
-                  <ProtectedRoute requiredRole="ROLE_DOCTOR">
-                    <DoctorDashboard />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Protected User Dashboard Routes */}
+                <Route
+                  path="/favorites"
+                  element={
+                    <ProtectedRoute>
+                      <FavoritesDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <UserProfile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/appointments"
+                  element={
+                    <ProtectedRoute>
+                      <MyAppointments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/consultation/:appointmentId"
+                  element={
+                    <ProtectedRoute>
+                      <ConsultationRoom />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Admin Governance Portal */}
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <ProtectedRoute requiredRole="ROLE_ADMIN">
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Doctor Consultation Console */}
+                <Route
+                  path="/doctor/dashboard"
+                  element={
+                    <ProtectedRoute requiredRole="ROLE_DOCTOR">
+                      <DoctorDashboard />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route path="*" element={<PlaceholderPage title="404 - Page Not Found" description="The page you are looking for does not exist." />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
+                {/* Admin Governance Portal */}
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <ProtectedRoute requiredRole="ROLE_ADMIN">
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route path="*" element={<PlaceholderPage title="404 - Page Not Found" description="The page you are looking for does not exist." />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 }

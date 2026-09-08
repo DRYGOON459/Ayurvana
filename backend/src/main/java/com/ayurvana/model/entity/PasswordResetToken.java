@@ -33,6 +33,6 @@ public class PasswordResetToken extends BaseEntity {
     private Boolean isUsed = false;
 
     public boolean isExpired() {
-        return Instant.now().isAfter(expiryDate);
+        return expiryDate != null && Instant.now().isAfter(expiryDate);
     }
 }

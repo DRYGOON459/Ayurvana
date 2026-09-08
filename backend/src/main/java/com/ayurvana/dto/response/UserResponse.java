@@ -19,6 +19,8 @@ public class UserResponse {
     private String fullName;
     private String phoneNumber;
     private String avatarUrl;
+    private String bio;
+    private String doshaType;
     private List<String> roles;
     private boolean active;
 }

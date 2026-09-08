@@ -21,5 +21,6 @@ public class VerifyPaymentRequest {
 
     private String gatewaySignature;
 
+    @Builder.Default
     private Boolean simulateSuccess = true;
 }

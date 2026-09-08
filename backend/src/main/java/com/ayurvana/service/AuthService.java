@@ -15,4 +15,8 @@ public interface AuthService {
     UserResponse getCurrentUser(UserPrincipal currentUser);
 
     UserResponse updateProfile(UserPrincipal currentUser, com.ayurvana.dto.request.UpdateProfileRequest request);
+
+    String forgotPassword(com.ayurvana.dto.request.ForgotPasswordRequest request);
+
+    void resetPassword(com.ayurvana.dto.request.ResetPasswordRequest request);
 }

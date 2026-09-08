@@ -59,4 +59,16 @@ public class AuthController {
         UserResponse response = authService.updateProfile(currentUser, request);
         return ResponseEntity.ok(ApiResponse.success(response, "Profile updated successfully"));
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<String>> forgotPassword(@Valid @RequestBody com.ayurvana.dto.request.ForgotPasswordRequest request) {
+        String token = authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(token, "Password reset code generated. Use code to reset your password."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody com.ayurvana.dto.request.ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "Password has been successfully updated. You can now login."));
+    }
 }

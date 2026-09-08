@@ -52,9 +52,10 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // Allows H2 Console in dev
                 .authorizeHttpRequests(auth -> auth
                         // Public Information & Educational Endpoints
-                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
+                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/forgot-password", "/api/v1/auth/reset-password").permitAll()
                         .requestMatchers("/api/v1/health/**", "/h2-console/**", "/ws/**", "/ws-raw/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/herbs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/yoga/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/meditations/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/ayurveda/**").permitAll()
@@ -68,6 +69,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/me", "/api/v1/auth/profile").authenticated()
                         .requestMatchers("/api/v1/favorites/**").authenticated()
                         .requestMatchers("/api/v1/appointments/**").authenticated()
+                        .requestMatchers("/api/v1/orders/**").authenticated()
+                        .requestMatchers("/api/v1/payments/**").authenticated()
                         .requestMatchers("/api/v1/chat/**").authenticated()
                         .requestMatchers("/api/v1/video/**").authenticated()
                         .requestMatchers("/api/v1/plant-scanner/history").authenticated()

@@ -13,6 +13,8 @@ export default function UserProfile() {
   // Edit form state
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [bio, setBio] = useState('');
+  const [doshaType, setDoshaType] = useState('TRIDOSHIC');
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,6 +26,8 @@ export default function UserProfile() {
         setProfile(res.data);
         setFullName(res.data.fullName || '');
         setPhoneNumber(res.data.phoneNumber || '');
+        setBio(res.data.bio || '');
+        setDoshaType(res.data.doshaType || 'TRIDOSHIC');
       })
       .catch((err) => console.error("Error loading user profile", err))
       .finally(() => setLoading(false));
@@ -36,7 +40,7 @@ export default function UserProfile() {
     setErrorMessage('');
 
     try {
-      const res = await authService.updateProfile({ fullName, phoneNumber });
+      const res = await authService.updateProfile({ fullName, phoneNumber, bio, doshaType });
       setProfile(res.data);
       setSuccessMessage('Profile updated successfully.');
       setTimeout(() => setSuccessMessage(''), 4000);
@@ -178,16 +182,45 @@ export default function UserProfile() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-ayur-500 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+              Dominant Ayurvedic Constitution (Dosha)
+            </label>
+            <select
+              value={doshaType}
+              onChange={(e) => setDoshaType(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+            >
+              <option value="VATA">Vata (Air &amp; Ether)</option>
+              <option value="PITTA">Pitta (Fire &amp; Water)</option>
+              <option value="KAPHA">Kapha (Water &amp; Earth)</option>
+              <option value="TRIDOSHIC">Tridoshic (Balanced)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1.5">
+              Personal Wellness Bio &amp; Health Goals
+            </label>
+            <textarea
+              rows="3"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Share dietary preferences, chronic concerns, or wellness goals..."
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+            />
           </div>
 
           <div className="pt-2">
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-ayur-800 text-white text-xs font-semibold hover:bg-ayur-700 transition-all shadow-sm disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-emerald-800 text-white text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm disabled:opacity-50"
             >
               <Save className="w-3.5 h-3.5" />
               <span>{saving ? 'Saving...' : 'Save Profile Changes'}</span>

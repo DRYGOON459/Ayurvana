@@ -327,15 +327,40 @@ export default function ConsultationRoom() {
                 </button>
               </form>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {prescriptionNotes ? (
-                  <div className="p-4 rounded-2xl bg-earth-50/70 border border-earth-200 space-y-2">
-                    <span className="text-[10px] uppercase font-bold text-earth-900 tracking-wider block">
-                      Attending Vaidya's Prescription
-                    </span>
-                    <pre className="text-xs font-sans whitespace-pre-wrap text-gray-800 leading-relaxed">
-                      {prescriptionNotes}
-                    </pre>
+                  <div className="space-y-4">
+                    <div className="p-5 rounded-2xl bg-stone-50 border border-emerald-200 shadow-sm space-y-3">
+                      <div className="flex items-center justify-between border-b border-stone-200 pb-2.5">
+                        <span className="text-[10px] uppercase font-bold text-emerald-900 tracking-wider flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <span>Official Certified Digital Rx</span>
+                        </span>
+                        <button
+                          onClick={() => window.print()}
+                          className="text-[11px] font-bold text-emerald-800 hover:text-emerald-900 bg-white border border-emerald-300 px-2.5 py-1 rounded-lg shadow-xs hover:bg-emerald-50 transition"
+                        >
+                          Print / Save PDF Slip
+                        </button>
+                      </div>
+
+                      <pre className="text-xs font-sans whitespace-pre-wrap text-stone-800 leading-relaxed font-medium">
+                        {prescriptionNotes}
+                      </pre>
+
+                      <div className="pt-3 border-t border-stone-200 flex items-center justify-between text-[10px] text-stone-500">
+                        <span>Digital Stamp: AYUSH-CERTIFIED</span>
+                        <span className="font-mono">QR: RX-VERIFIED</span>
+                      </div>
+                    </div>
+
+                    <Link
+                      to="/store"
+                      className="w-full inline-flex items-center justify-center space-x-2 bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow transition"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Order Prescribed Herbal Remedies from Store</span>
+                    </Link>
                   </div>
                 ) : (
                   <div className="text-center py-12 text-gray-400 space-y-2">

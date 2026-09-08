@@ -20,9 +20,12 @@ import {
   Eye,
   HeartPulse,
   Calendar,
-  HelpCircle
+  HelpCircle,
+  ShoppingBag,
+  Package
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -30,6 +33,7 @@ export default function Navbar() {
   const [ayurvedaDropdownOpen, setAyurvedaDropdownOpen] = useState(false);
 
   const { user, isAuthenticated, logout, hasRole } = useAuth();
+  const { totalItemCount } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -39,12 +43,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
+    { name: 'Apothecary Shop', path: '/store', icon: ShoppingBag },
     { name: 'Herbs & Plants', path: '/herbs', icon: Leaf },
-    { name: 'Formulations', path: '/remedies', icon: Sparkles },
-    { name: 'Yoga', path: '/yoga', icon: SunMedium },
-    { name: 'Meditation', path: '/meditation', icon: SunMedium },
+    { name: 'Classical Remedies', path: '/remedies', icon: Sparkles },
+    { name: 'Yoga Studio', path: '/yoga', icon: SunMedium },
     { name: 'Doctors', path: '/doctors', icon: Stethoscope },
-    { name: 'Articles', path: '/articles', icon: BookOpen },
     { name: 'Plant Scanner', path: '/scanner', icon: Camera },
   ];
 
@@ -194,6 +197,19 @@ export default function Navbar() {
               <Heart className="w-4 h-4" />
             </Link>
 
+            <Link
+              to="/cart"
+              aria-label="Shopping Cart"
+              className="relative p-2 rounded-full text-gray-600 hover:text-emerald-800 hover:bg-emerald-50 transition-colors"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              {totalItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-emerald-700 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-xs">
+                  {totalItemCount}
+                </span>
+              )}
+            </Link>
+
             {/* User Dropdown */}
             {isAuthenticated ? (
               <div className="relative">
@@ -222,6 +238,15 @@ export default function Navbar() {
                     >
                       <User className="w-4 h-4 text-emerald-700" />
                       My Health Profile
+                    </Link>
+
+                    <Link
+                      to="/orders"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-sand-50 font-medium"
+                    >
+                      <Package className="w-4 h-4 text-emerald-700" />
+                      My Orders &amp; Shipments
                     </Link>
 
                     <Link
