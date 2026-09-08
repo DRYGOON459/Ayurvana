@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Utensils, Sparkles, CheckCircle2, XCircle, AlertTriangle, Filter, ChevronRight, Apple, Flame, Wind, Droplets } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Utensils, Sparkles, CheckCircle2, XCircle, AlertTriangle, Filter, ChevronRight, Apple, Flame, Wind, Droplets, BookOpen, Clock, Users, X } from 'lucide-react';
 import Disclaimer from '../../components/common/Disclaimer';
+import recipeService from '../../services/recipeService';
 
 const foodCategories = [
   {
@@ -58,114 +59,152 @@ const sixTastes = [
     taste: 'Lavana (Salty)',
     elements: 'Water + Fire',
     action: 'Retains cellular moisture, kindles taste buds, increases Pitta & Kapha',
-    sources: 'Himalayan Pink Rock Salt (Saindhava Lavana), sea salt, kelp'
+    sources: 'Rock salt (Saindhava Lavana), sea vegetables, black salt'
   },
   {
     taste: 'Katu (Pungent)',
     elements: 'Fire + Air',
-    action: 'Clears sinuses, burns Ama, stimulates metabolism, increases Vata & Pitta',
-    sources: 'Dry ginger, black pepper, pippali, garlic, cloves'
+    action: 'Clears sinuses, burns Ama toxins, calms Kapha, increases Vata & Pitta',
+    sources: 'Ginger, black pepper, pippali, chili, mustard, garlic'
   },
   {
     taste: 'Tikta (Bitter)',
     elements: 'Air + Ether',
-    action: 'Purifies blood, cleanses liver, reduces fever, increases Vata',
-    sources: 'Neem, turmeric, bitter melon, leafy greens, fenugreek'
+    action: 'Detoxifies blood and liver, clears heat, calms Pitta & Kapha, increases Vata',
+    sources: 'Neem, turmeric, bitter gourd, leafy greens, fenugreek'
   },
   {
     taste: 'Kashaya (Astringent)',
     elements: 'Air + Earth',
-    action: 'Contracts tissues, heals mucosal wounds, cools Pitta, increases Vata',
-    sources: 'Haritaki, green tea, pomegranates, raw bananas, legumes'
+    action: 'Heals mucosa, tightens tissues, calms Pitta & Kapha, increases Vata',
+    sources: 'Triphala, pomegranate, green tea, raw bananas, cranberries'
   }
 ];
 
 export default function DietGuide() {
   const [selectedDosha, setSelectedDosha] = useState('ALL');
+  const [recipes, setRecipes] = useState([]);
+  const [loadingRecipes, setLoadingRecipes] = useState(true);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [recipeFilter, setRecipeFilter] = useState('ALL');
+
+  useEffect(() => {
+    async function loadRecipes() {
+      try {
+        setLoadingRecipes(true);
+        const res = await recipeService.getAllRecipes(0, 20);
+        if (res?.data?.data?.content) {
+          setRecipes(res.data.data.content);
+        }
+      } catch (err) {
+        console.error("Failed to load recipes from backend", err);
+      } finally {
+        setLoadingRecipes(false);
+      }
+    }
+    loadRecipes();
+  }, []);
+
+  const openRecipeDetail = async (slug) => {
+    try {
+      const res = await recipeService.getRecipeBySlug(slug);
+      if (res?.data?.data) {
+        setSelectedRecipe(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch recipe detail", err);
+    }
+  };
+
+  const filteredRecipes = recipes.filter(r => {
+    if (recipeFilter === 'ALL') return true;
+    return r.doshaSuitability === recipeFilter;
+  });
 
   return (
-    <div className="min-h-screen bg-sand-50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-10">
-        
+    <div className="min-h-screen bg-gradient-to-b from-stone-50 via-white to-stone-50 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold tracking-wide uppercase">
-            <Utensils className="w-3.5 h-3.5" />
-            Ayurvedic Nutritional Science (Āhāra Vijñāna)
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
+            <Utensils className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Ayurvedic Āhāra Vijnāna</span>
           </div>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-earth-950">
-            Ayurvedic Diet & Food Chart Guide
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 tracking-tight">
+            Ayurvedic Diet & Nutrition Guide
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto text-base">
-            "When diet is wrong, medicine is of no use. When diet is correct, medicine is of no need." — Classical Ayurvedic Proverb
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+            "When diet is wrong, medicine is of no use. When diet is correct, medicine is of no need."
+            Explore individual food energetics, incompatible combinations (Viruddha Ahara), and authentic therapeutic recipes.
           </p>
         </div>
 
-        {/* Dosha Selector Tab */}
-        <div className="bg-white rounded-3xl p-4 sm:p-6 border border-gray-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-earth-950 font-serif font-bold text-base">
-            <Filter className="w-5 h-5 text-emerald-700" />
-            Filter by Constitutional Imbalance (Dosha):
+        {/* Six Tastes (Shad Rasa) Table */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-6">
+          <div className="flex items-center gap-2 text-stone-900 font-serif font-bold text-xl">
+            <Sparkles className="w-5 h-5 text-amber-600" />
+            The Six Classical Tastes (Ṣaḍ Rasa)
           </div>
+          <p className="text-xs text-stone-600 leading-relaxed max-w-3xl">
+            In Ayurveda, every meal should ideally balance all six tastes to satisfy the palate, stimulate optimal enzymatic secretions, and prevent overeating:
+          </p>
 
-          <div className="flex items-center gap-2 bg-sand-100 p-1.5 rounded-2xl w-full sm:w-auto overflow-x-auto">
-            {['ALL', 'VATA', 'PITTA', 'KAPHA'].map((d) => (
-              <button
-                key={d}
-                onClick={() => setSelectedDosha(d)}
-                className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                  selectedDosha === d
-                    ? 'bg-earth-900 text-white shadow-sm'
-                    : 'text-earth-800 hover:bg-sand-200'
-                }`}
-              >
-                {d === 'ALL' ? 'Complete View' : `${d} Pacifying`}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Six Tastes (Shad Rasa) Cards */}
-        <div className="space-y-4">
-          <h2 className="font-serif text-2xl font-bold text-earth-950">
-            The Six Sacred Tastes (Ṣaḍ Rasa)
-          </h2>
-          <p className="text-xs text-gray-500">A wholesome meal should incorporate all six tastes to ensure complete physiological satiety.</p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {sixTastes.map((t, idx) => (
-              <div key={idx} className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-serif font-bold text-sm text-earth-950">{t.taste}</h3>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-sand-100 text-earth-800 font-semibold">
-                    {t.elements}
-                  </span>
+              <div key={idx} className="bg-stone-50/70 p-4 rounded-2xl border border-stone-200/60 space-y-2 hover:border-emerald-300 transition-colors">
+                <div className="font-serif font-bold text-sm text-stone-900">{t.taste}</div>
+                <div className="text-[11px] font-medium text-emerald-700 bg-emerald-50 inline-block px-2 py-0.5 rounded-md">
+                  {t.elements}
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">{t.action}</p>
-                <div className="text-[11px] text-emerald-800 font-medium pt-1">
-                  <strong>Examples:</strong> {t.sources}
+                <p className="text-xs text-stone-600">{t.action}</p>
+                <div className="text-[11px] text-stone-500 pt-1 border-t border-stone-200/60">
+                  <strong className="text-stone-700">Sources:</strong> {t.sources}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Master Food Chart by Category */}
-        <div className="space-y-6">
-          <h2 className="font-serif text-2xl font-bold text-earth-950">
-            Dosha Food Classification Matrix
-          </h2>
+        {/* Interactive Food Matrix */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-serif font-bold text-stone-900 flex items-center gap-2">
+                <Apple className="w-5 h-5 text-emerald-600" />
+                Dosha-Specific Food Guide
+              </h2>
+              <p className="text-xs text-stone-600 mt-1">
+                Filter by constitutional dosha to view which foods nourish and which create imbalance.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 gap-6">
+            {/* Dosha Filter Buttons */}
+            <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-2xl text-xs font-medium">
+              {['ALL', 'VATA', 'PITTA', 'KAPHA'].map(dosha => (
+                <button
+                  key={dosha}
+                  onClick={() => setSelectedDosha(dosha)}
+                  className={`px-3 py-1.5 rounded-xl transition-all ${
+                    selectedDosha === dosha
+                      ? 'bg-white text-stone-900 font-semibold shadow-sm'
+                      : 'text-stone-600 hover:text-stone-900'
+                  }`}
+                >
+                  {dosha === 'ALL' ? 'All Doshas' : dosha}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4 pt-2">
             {foodCategories.map((cat, idx) => (
-              <div key={idx} className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-sm space-y-5">
-                <h3 className="font-serif text-xl font-bold text-earth-950 border-b border-gray-100 pb-3 flex items-center gap-2">
-                  <Apple className="w-5 h-5 text-emerald-700" />
+              <div key={idx} className="border border-stone-200 rounded-2xl p-5 hover:border-stone-300 transition-colors">
+                <h3 className="font-serif font-bold text-sm text-stone-900 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
                   {cat.category}
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {/* Vata Column */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {(selectedDosha === 'ALL' || selectedDosha === 'VATA') && (
                     <div className="bg-blue-50/40 rounded-2xl p-4 border border-blue-100 space-y-3">
                       <div className="flex items-center gap-2 text-blue-900 font-serif font-bold text-sm">
@@ -185,7 +224,6 @@ export default function DietGuide() {
                     </div>
                   )}
 
-                  {/* Pitta Column */}
                   {(selectedDosha === 'ALL' || selectedDosha === 'PITTA') && (
                     <div className="bg-amber-50/40 rounded-2xl p-4 border border-amber-100 space-y-3">
                       <div className="flex items-center gap-2 text-amber-900 font-serif font-bold text-sm">
@@ -205,7 +243,6 @@ export default function DietGuide() {
                     </div>
                   )}
 
-                  {/* Kapha Column */}
                   {(selectedDosha === 'ALL' || selectedDosha === 'KAPHA') && (
                     <div className="bg-emerald-50/40 rounded-2xl p-4 border border-emerald-100 space-y-3">
                       <div className="flex items-center gap-2 text-emerald-900 font-serif font-bold text-sm">
@@ -229,6 +266,178 @@ export default function DietGuide() {
             ))}
           </div>
         </div>
+
+        {/* Classical Ayurvedic Recipes Section */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-stone-900 font-serif font-bold text-xl">
+                <BookOpen className="w-5 h-5 text-emerald-600" />
+                Classical Ayurvedic Recipes & Kitchen Pharmacy
+              </div>
+              <p className="text-xs text-stone-600 mt-1">
+                Authentic classical dishes prepared with specific spices to optimize Agni and balance constitutional doshas.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-1.5 p-1 bg-stone-100 rounded-2xl text-xs font-medium">
+              {['ALL', 'TRIDOSHIC', 'VATA', 'PITTA', 'KAPHA'].map(d => (
+                <button
+                  key={d}
+                  onClick={() => setRecipeFilter(d)}
+                  className={`px-3 py-1.5 rounded-xl transition-all ${
+                    recipeFilter === d
+                      ? 'bg-emerald-700 text-white font-semibold shadow-sm'
+                      : 'text-stone-600 hover:text-stone-900'
+                  }`}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {loadingRecipes ? (
+            <div className="text-center py-12 text-sm text-stone-500 animate-pulse">
+              Loading authentic Ayurvedic recipes...
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+              {filteredRecipes.map((recipe) => (
+                <div
+                  key={recipe.id}
+                  className="bg-stone-50/60 rounded-2xl border border-stone-200/80 overflow-hidden hover:shadow-md transition-all flex flex-col group cursor-pointer"
+                  onClick={() => openRecipeDetail(recipe.slug)}
+                >
+                  <div className="h-44 overflow-hidden relative">
+                    <img
+                      src={recipe.imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'}
+                      alt={recipe.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-3 left-3 bg-stone-900/75 backdrop-blur-md text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
+                      {recipe.doshaSuitability}
+                    </div>
+                    <div className="absolute top-3 right-3 bg-emerald-600/90 text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
+                      {recipe.mealType}
+                    </div>
+                  </div>
+
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <h4 className="font-serif font-bold text-base text-stone-900 group-hover:text-emerald-700 transition-colors">
+                        {recipe.title}
+                      </h4>
+                      {recipe.sanskritName && (
+                        <p className="text-xs text-emerald-800 font-medium mt-0.5">
+                          {recipe.sanskritName}
+                        </p>
+                      )}
+                      <p className="text-xs text-stone-600 mt-2 line-clamp-2">
+                        {recipe.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-stone-200 flex items-center justify-between text-[11px] text-stone-500">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-stone-400" />
+                        <span>{recipe.cookTimeMinutes} mins</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-stone-400" />
+                        <span>{recipe.servings} Servings</span>
+                      </div>
+                      <span className="text-emerald-700 font-semibold group-hover:underline flex items-center">
+                        View Recipe <ChevronRight className="w-3 h-3 ml-0.5" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Recipe Detail Modal */}
+        {selectedRecipe && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-stone-200 p-6 sm:p-8 space-y-6 relative">
+              <button
+                onClick={() => setSelectedRecipe(null)}
+                className="absolute top-5 right-5 p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    {selectedRecipe.doshaSuitability} Pacifier
+                  </span>
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                    {selectedRecipe.mealType}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-stone-900">
+                  {selectedRecipe.title}
+                </h3>
+                {selectedRecipe.sanskritName && (
+                  <p className="text-sm font-serif text-emerald-800 font-medium italic">
+                    {selectedRecipe.sanskritName}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 p-3 bg-stone-50 rounded-2xl text-xs text-center border border-stone-200">
+                <div>
+                  <div className="text-stone-400">Prep Time</div>
+                  <div className="font-bold text-stone-800 mt-0.5">{selectedRecipe.prepTimeMinutes} mins</div>
+                </div>
+                <div>
+                  <div className="text-stone-400">Cook Time</div>
+                  <div className="font-bold text-stone-800 mt-0.5">{selectedRecipe.cookTimeMinutes} mins</div>
+                </div>
+                <div>
+                  <div className="text-stone-400">Servings</div>
+                  <div className="font-bold text-stone-800 mt-0.5">{selectedRecipe.servings} People</div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-serif font-bold text-sm text-stone-900">Therapeutic Action & Agni Dynamics</h4>
+                <p className="text-xs text-stone-600 leading-relaxed bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100">
+                  {selectedRecipe.therapeuticBenefits || selectedRecipe.digestiveActionAgni || selectedRecipe.description}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-serif font-bold text-sm text-stone-900">Ayurvedic Ingredients & Spices</h4>
+                <ul className="space-y-1.5 text-xs text-stone-700 list-disc list-inside bg-stone-50 p-4 rounded-xl border border-stone-200">
+                  {selectedRecipe.ingredients?.map((ing, i) => (
+                    <li key={i}>{ing}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-serif font-bold text-sm text-stone-900">Classical Preparation Steps</h4>
+                <ol className="space-y-2 text-xs text-stone-700 list-decimal list-inside">
+                  {selectedRecipe.instructions?.map((inst, i) => (
+                    <li key={i} className="leading-relaxed pl-1 pb-1">
+                      {inst}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {selectedRecipe.classicalReference && (
+                <div className="text-[11px] text-stone-500 pt-3 border-t border-stone-200">
+                  <strong>Classical Reference:</strong> {selectedRecipe.classicalReference}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Viruddha Ahara Warnings */}
         <div className="bg-rose-50/60 rounded-3xl p-6 sm:p-8 border border-rose-200 shadow-sm space-y-4">
