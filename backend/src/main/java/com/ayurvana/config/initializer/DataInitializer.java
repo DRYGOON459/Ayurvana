@@ -16,7 +16,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
-
         private final RoleRepository roleRepository;
         private final HerbRepository herbRepository;
         private final YogaPoseRepository yogaPoseRepository;
