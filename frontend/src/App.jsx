@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import AyurBot from './components/common/AyurBot';
 import Home from './pages/Home';
 
 // E-Commerce & Pharmacy Store Pages
@@ -211,6 +212,7 @@ export default function App() {
               </Routes>
             </main>
             <Footer />
+            <AyurBot />
           </div>
         </BrowserRouter>
       </CartProvider>

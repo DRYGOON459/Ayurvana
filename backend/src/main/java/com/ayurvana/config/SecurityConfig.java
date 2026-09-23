@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/recipes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/dosha-quiz/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/dosha-quiz/evaluate").permitAll()
+                        .requestMatchers("/api/v1/ai-chat/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/search/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/doctors/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/appointments/doctor/**").permitAll()
