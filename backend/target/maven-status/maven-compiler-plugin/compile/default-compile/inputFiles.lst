@@ -22,6 +22,7 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\AyurvedaS
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\VideoConsultationController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\UpdateAppointmentStatusRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\PasswordResetTokenRepository.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\AiChatService.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\OrderItemRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\DoshaQuizOption.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\PasswordResetToken.java
@@ -65,6 +66,7 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\Reci
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\ChatMessageResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\User.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\SendMessageRequest.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\AiChatMessageResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\CreatePaymentIntentRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\UserRepository.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\OrderItem.java
@@ -142,9 +144,11 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\Medi
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\PlantSafetyRepository.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\ProductController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\ConversationRepository.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\AiChatMessageRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\UpdateProfileRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\PaymentStatus.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\RoleRepository.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\AiChatController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\ApiResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\ResetPasswordRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\exception\ResourceNotFoundException.java
@@ -167,7 +171,9 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\config\initialize
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\AddFavoriteRequest.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\DoctorVerificationRepository.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\ConversationDetailResponse.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\AiChatServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\PlantScanServiceImpl.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\AiChatSuggestionResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\ArticleServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\MeditationController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\ProductCategory.java

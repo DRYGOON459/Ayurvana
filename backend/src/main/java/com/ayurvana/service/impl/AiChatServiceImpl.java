@@ -229,7 +229,9 @@ public class AiChatServiceImpl implements AiChatService {
                         "**Precautions / Contraindications:** %s",
                         h.getCommonName(), h.getSanskritName(), h.getScientificName(), h.getBotanicalFamily(),
                         h.getRasa(), h.getVirya(), h.getVipaka(), h.getPrimaryDoshaEffect(),
-                        h.getTraditionalUses(), h.getDosageInstructions(), h.getContraindications()))
+                        h.getTraditionalUses(),
+                        h.getDosageAndPreparations() != null ? h.getDosageAndPreparations() : "Consult physician",
+                        h.getSafety() != null && h.getSafety().getContraindications() != null ? h.getSafety().getContraindications() : "Safe under qualified clinical guidance."))
                         .sanskritShloka("यथा विषं यथा शस्त्रं यथाऽग्निरशनिर्यथा। तथौषधमविज्ञातं विज्ञातममृतं यथा॥")
                         .shlokaMeaning("An herb used without proper knowledge acts like poison or fire; used with precise understanding, it acts as the nectar of immortality.")
                         .classicalTreatiseReference("Charaka Samhita, Sutra Sthana 1/124")

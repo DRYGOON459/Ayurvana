@@ -76,7 +76,7 @@ public class AiChatMessageResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DoctorCard {
-        private Long id;
+        private java.util.UUID id;
         private String name;
         private String primarySpecialization;
         private Integer yearsOfExperience;
