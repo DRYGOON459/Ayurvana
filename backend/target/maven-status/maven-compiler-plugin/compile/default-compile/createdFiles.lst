@@ -4,6 +4,7 @@ com\ayurvana\model\entity\PlantScan$PlantScanBuilder.class
 com\ayurvana\service\OrderService.class
 com\ayurvana\dto\response\ProductDetailResponse$ProductDetailResponseBuilder.class
 com\ayurvana\service\HerbService.class
+com\ayurvana\service\ai\AyurvedicKnowledgeRetriever.class
 com\ayurvana\repository\ProductRepository.class
 com\ayurvana\service\scanner\PlantIdentificationResult$PlantIdentificationResultBuilder.class
 com\ayurvana\dto\response\AiChatSuggestionResponse.class
@@ -78,6 +79,7 @@ com\ayurvana\security\CustomUserDetailsService.class
 com\ayurvana\dto\response\AiChatMessageResponse$ProductCard$ProductCardBuilder.class
 com\ayurvana\dto\response\AiChatMessageResponse$RecipeCard.class
 com\ayurvana\service\impl\ArticleServiceImpl.class
+com\ayurvana\service\ai\AyurvedicDynamicSynthesizer$SynthesizedResponse$SynthesizedResponseBuilder.class
 com\ayurvana\dto\request\LoginRequest$LoginRequestBuilder.class
 com\ayurvana\dto\response\ArticleSummaryResponse.class
 com\ayurvana\dto\response\RecipeSummaryResponse$RecipeSummaryResponseBuilder.class
@@ -141,6 +143,7 @@ com\ayurvana\dto\response\AiChatSuggestionResponse$AiChatSuggestionResponseBuild
 com\ayurvana\dto\response\JwtAuthResponse$JwtAuthResponseBuilder.class
 com\ayurvana\model\entity\DoshaAssessmentResult.class
 com\ayurvana\dto\request\DoshaQuizEvaluationRequest$DoshaQuizEvaluationRequestBuilder.class
+com\ayurvana\service\ai\AyurvedicDynamicSynthesizer.class
 com\ayurvana\model\entity\PlantReference.class
 com\ayurvana\dto\request\CreatePaymentIntentRequest.class
 com\ayurvana\model\entity\AyurvedaTopic.class
@@ -218,6 +221,7 @@ com\ayurvana\dto\response\GlobalSearchResultResponse.class
 com\ayurvana\model\entity\YogaPose.class
 com\ayurvana\repository\PaymentTransactionRepository.class
 com\ayurvana\service\impl\SearchServiceImpl.class
+com\ayurvana\service\ai\AyurvedicKnowledgeRetriever$RetrievalResult$RetrievalResultBuilder.class
 com\ayurvana\dto\request\AddFavoriteRequest$AddFavoriteRequestBuilder.class
 com\ayurvana\dto\response\DayAvailabilityResponse.class
 com\ayurvana\controller\SearchController.class
@@ -238,6 +242,7 @@ com\ayurvana\model\enums\FavoriteType.class
 com\ayurvana\controller\ProductController.class
 com\ayurvana\dto\response\PlantReferenceResponse.class
 com\ayurvana\model\entity\AyurvedicRecipe$AyurvedicRecipeBuilder.class
+com\ayurvana\service\ai\GeminiApiClient$GeminiResponsePayload.class
 com\ayurvana\security\UserPrincipal.class
 com\ayurvana\model\enums\ToxicityLevel.class
 com\ayurvana\dto\response\AiChatMessageResponse.class
@@ -252,6 +257,7 @@ com\ayurvana\service\impl\AppointmentServiceImpl.class
 com\ayurvana\dto\request\CreatePaymentIntentRequest$CreatePaymentIntentRequestBuilder.class
 com\ayurvana\config\initializer\RecipeDataSeeder.class
 com\ayurvana\model\entity\PlantScan.class
+com\ayurvana\service\ai\AyurvedicKnowledgeRetriever$RetrievalResult.class
 com\ayurvana\dto\request\SendMessageRequest.class
 com\ayurvana\model\entity\User.class
 com\ayurvana\dto\response\ArticleSummaryResponse$ArticleSummaryResponseBuilder.class
@@ -272,6 +278,7 @@ com\ayurvana\model\entity\Meditation.class
 com\ayurvana\repository\PasswordResetTokenRepository.class
 com\ayurvana\controller\AppointmentController.class
 com\ayurvana\service\impl\ProductServiceImpl.class
+com\ayurvana\service\ai\GeminiApiClient.class
 com\ayurvana\dto\request\CreateOrderRequest.class
 com\ayurvana\dto\response\ArticleDetailResponse$ArticleDetailResponseBuilder.class
 com\ayurvana\model\enums\DifficultyLevel.class
@@ -294,6 +301,7 @@ com\ayurvana\controller\AdminController.class
 com\ayurvana\security\JwtAuthenticationFilter.class
 com\ayurvana\config\SecurityConfig.class
 com\ayurvana\dto\response\HerbDetailResponse$HerbDetailResponseBuilder.class
+com\ayurvana\service\ai\AyurvedicDynamicSynthesizer$SynthesizedResponse.class
 com\ayurvana\controller\PlantScanController.class
 com\ayurvana\dto\request\OrderItemRequest.class
 com\ayurvana\model\entity\Article$ArticleBuilder.class

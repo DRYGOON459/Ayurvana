@@ -58,7 +58,9 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\Toxic
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\DoshaQuizQuestion.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\YogaPose.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\PlantScanRepository.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\ai\AyurvedicKnowledgeRetriever.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\FavoriteController.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\ai\GeminiApiClient.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\Meditation.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\repository\MeditationRepository.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\request\ForgotPasswordRequest.java
@@ -178,6 +180,7 @@ C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\Arti
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\controller\MeditationController.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\enums\ProductCategory.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\model\entity\AyurvedaTopic.java
+C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\ai\AyurvedicDynamicSynthesizer.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\YogaPoseResponse.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\service\impl\SearchServiceImpl.java
 C:\Users\broor\Desktop\ayur\backend\src\main\java\com\ayurvana\dto\response\DoshaQuizQuestionResponse.java

@@ -41,8 +41,9 @@ export default function AyurBot() {
     // Fetch dynamic categories
     aiChatService.getSuggestions()
       .then(res => {
-        if (res?.data?.data) {
-          setSuggestions(res.data.data);
+        const payload = res?.data || res;
+        if (payload?.categories) {
+          setSuggestions(payload);
         }
       })
       .catch(err => console.error("Error fetching suggestions", err));
@@ -63,7 +64,7 @@ export default function AyurBot() {
   }, [isOpen]);
 
   const speakText = (text) => {
-    if (!('speechSynthesis' in window) || isMuted) return;
+    if (!('speechSynthesis' in window) || isMuted || !text) return;
     window.speechSynthesis.cancel();
     // Clean markdown symbols for cleaner TTS
     const clean = text.replace(/[*#_`]/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1');
@@ -100,14 +101,25 @@ export default function AyurBot() {
         history
       );
 
-      if (res?.data?.data) {
+      const payload = res?.data || res;
+      if (payload && payload.reply) {
         const botMsg = {
           id: 'bot-' + Date.now(),
           role: 'assistant',
-          ...res.data.data
+          reply: payload.reply,
+          sanskritShloka: payload.sanskritShloka,
+          shlokaMeaning: payload.shlokaMeaning,
+          classicalTreatiseReference: payload.classicalTreatiseReference,
+          quickReplies: payload.quickReplies || [],
+          recommendedProducts: payload.recommendedProducts || [],
+          recommendedRecipes: payload.recommendedRecipes || [],
+          recommendedHerbs: payload.recommendedHerbs || [],
+          recommendedDoctors: payload.recommendedDoctors || []
         };
         setMessages(prev => [...prev, botMsg]);
-        speakText(res.data.data.reply);
+        speakText(payload.reply);
+      } else {
+        throw new Error("Empty reply payload");
       }
     } catch (err) {
       console.error("AI Chat message failed", err);
