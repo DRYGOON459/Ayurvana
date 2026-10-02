@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Bot, MessageSquare, X, Send, Sparkles, Compass, Leaf, Utensils, 
   UserCheck, RotateCcw, Volume2, VolumeX, Maximize2, Minimize2, 
-  ShoppingBag, ChevronRight, BookOpen, Clock, Heart, Award, ArrowUpRight
+  ShoppingBag, ChevronRight, BookOpen, Clock, Heart, Award, ArrowUpRight,
+  Mic, MicOff, Copy, Check, FileDown, Activity, Sun, Moon, Flame
 } from 'lucide-react';
 import { aiChatService } from '../../services/aiChatService';
 import { useCart } from '../../context/CartContext';
@@ -18,27 +19,84 @@ export default function AyurBot() {
   const [suggestions, setSuggestions] = useState(null);
   const [activeCategory, setActiveCategory] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [isListening, setIsListening] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
+  const [language, setLanguage] = useState('EN'); // 'EN', 'HI', 'SA'
+  const [quizStep, setQuizStep] = useState(null); // null, 0, 1, 2 for in-chat mini dosha test
+  const [quizScores, setQuizScores] = useState({ vata: 0, pitta: 0, kapha: 0 });
 
   const { addToCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
 
-  // Initial welcome message
+  // Initialize Speech Recognition if supported
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = language === 'HI' ? 'hi-IN' : 'en-IN';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(prev => prev ? prev + ' ' + transcript : transcript);
+        setIsListening(false);
+      };
+
+      recognition.onerror = (err) => {
+        console.error("Speech recognition error", err);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, [language]);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  // Initial greeting
   useEffect(() => {
     const initialGreeting = {
       id: 'msg-welcome',
       role: 'assistant',
-      reply: `Namaste${user?.fullName ? ' ' + user.fullName : ''}! 🙏 I am your **AyurVana Vaidya AI Assistant**, grounded in the classical treatises of the *Charaka Samhita*, *Sushruta Samhita*, and *Ashtanga Hridaya*.\n\nHow may I support your health, Dosha balance, or herbal wellness today?`,
-      sanskritShloka: 'सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः।',
+      reply: `Namaste${user?.fullName ? ' ' + user.fullName : ''}! 🙏 I am your **AyurVana Master Vaidya AI Companion**, grounded in the classical treatises of the *Charaka Samhita*, *Sushruta Samhita*, and *Ashtanga Hridaya*.\n\nAsk me anything about your symptoms, classical herbs, customized dietary rules (Pathya-Apathya), daily circadian routines, or take an instant in-chat assessment.`,
+      sanskritShloka: 'सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः। सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत्॥',
       shlokaMeaning: 'May all beings be healthy, happy, and free from disease and suffering.',
       classicalTreatiseReference: 'Brihadaranyaka Upanishad',
-      quickReplies: ['What is my Dosha?', 'Remedy for insomnia & sleep', 'How to soothe acid reflux?', 'Explore Apothecary Store', 'Consult a Doctor']
+      quickReplies: [
+        '🌿 In-Chat Dosha Assessment', 
+        '⏰ What should I do right now? (Dinacharya)', 
+        'Remedy for insomnia & sleep', 
+        'How to soothe acid reflux & GERD?', 
+        'Herbs for hair fall & graying'
+      ]
     };
     setMessages([initialGreeting]);
 
-    // Fetch dynamic categories
     aiChatService.getSuggestions()
       .then(res => {
         const payload = res?.data || res;
@@ -54,7 +112,7 @@ export default function AyurBot() {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, quizStep]);
 
   // Focus input on open
   useEffect(() => {
@@ -66,7 +124,6 @@ export default function AyurBot() {
   const speakText = (text) => {
     if (!('speechSynthesis' in window) || isMuted || !text) return;
     window.speechSynthesis.cancel();
-    // Clean markdown symbols for cleaner TTS
     const clean = text.replace(/[*#_`]/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1');
     const utterance = new SpeechSynthesisUtterance(clean);
     utterance.rate = 0.95;
@@ -74,9 +131,23 @@ export default function AyurBot() {
     window.speechSynthesis.speak(utterance);
   };
 
+  const copyToClipboard = (text, id) => {
+    const clean = text.replace(/[*#_`]/g, '');
+    navigator.clipboard.writeText(clean);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const handleSendMessage = async (userText) => {
     const textToSend = (userText || inputMessage).trim();
     if (!textToSend || loading) return;
+
+    // Check if user clicked in-chat assessment
+    if (textToSend.toLowerCase().includes('in-chat dosha') || textToSend.toLowerCase().includes('assessment') || textToSend.toLowerCase().includes('diagnose me')) {
+      startInChatQuiz();
+      setInputMessage('');
+      return;
+    }
 
     const userMsg = {
       id: 'usr-' + Date.now(),
@@ -89,7 +160,6 @@ export default function AyurBot() {
     setLoading(true);
 
     try {
-      // Build history for context
       const history = messages.slice(-4).map(m => ({
         role: m.role,
         content: m.role === 'user' ? m.content : m.reply
@@ -135,13 +205,101 @@ export default function AyurBot() {
     }
   };
 
+  // In-Chat Diagnostic Quiz Handler
+  const startInChatQuiz = () => {
+    setQuizStep(0);
+    setQuizScores({ vata: 0, pitta: 0, kapha: 0 });
+    const quizStartMsg = {
+      id: 'quiz-start-' + Date.now(),
+      role: 'assistant',
+      reply: "🌿 **Instant Ayurvedic Prakriti & Vikriti Assessment**\n\nLet's analyze your current biological state with 3 diagnostic questions. Please select the option that best reflects your state over the past few weeks:",
+      isQuizBanner: true
+    };
+    setMessages(prev => [...prev, quizStartMsg]);
+  };
+
+  const quizQuestions = [
+    {
+      title: "1. Digestive Fire (Agni) & Appetite",
+      options: [
+        { label: "Irregular, prone to gas, bloating & constipation", dosha: "vata", icon: "💨" },
+        { label: "Intense, sharp, acidic, cannot tolerate skipping meals", dosha: "pitta", icon: "🔥" },
+        { label: "Slow, heavy, can easily skip meals, sluggish after eating", dosha: "kapha", icon: "💧" }
+      ]
+    },
+    {
+      title: "2. Mind, Stress & Sleep Pattern",
+      options: [
+        { label: "Racing thoughts, light sleeper, anxious, restless at night", dosha: "vata", icon: "🌙" },
+        { label: "Sharp focus, vivid dreams, irritable under stress, wake hot", dosha: "pitta", icon: "⚡" },
+        { label: "Calm, deep heavy sleep, hard to wake up in morning, laid-back", dosha: "kapha", icon: "🛌" }
+      ]
+    },
+    {
+      title: "3. Body Temperature & Physical Energy",
+      options: [
+        { label: "Always cold hands/feet, dry skin, energetic in bursts then tired", dosha: "vata", icon: "❄️" },
+        { label: "Always warm, sweat easily, sensitive to sun & spices", dosha: "pitta", icon: "☀️" },
+        { label: "Steady endurance, slow to gain momentum, gain weight easily", dosha: "kapha", icon: "🏔️" }
+      ]
+    }
+  ];
+
+  const handleQuizAnswer = (dosha) => {
+    const updated = { ...quizScores, [dosha]: quizScores[dosha] + 1 };
+    setQuizScores(updated);
+
+    if (quizStep < quizQuestions.length - 1) {
+      setQuizStep(quizStep + 1);
+    } else {
+      // Completed quiz! Calculate dominant
+      setQuizStep(null);
+      let dominant = 'Vata';
+      let maxScore = updated.vata;
+      if (updated.pitta > maxScore) {
+        dominant = 'Pitta';
+        maxScore = updated.pitta;
+      }
+      if (updated.kapha > maxScore) {
+        dominant = 'Kapha';
+      }
+
+      const total = updated.vata + updated.pitta + updated.kapha || 1;
+      const vPct = Math.round((updated.vata / total) * 100);
+      const pPct = Math.round((updated.pitta / total) * 100);
+      const kPct = Math.round((updated.kapha / total) * 100);
+
+      const resultMsg = {
+        id: 'quiz-result-' + Date.now(),
+        role: 'assistant',
+        reply: `### ⚖️ Assessment Result: Elevated **${dominant} Dosha**\n\n` +
+          `**Constitutional Imbalance Breakdown:**\n` +
+          `- **💨 Vata:** ${vPct}%\n- **🔥 Pitta:** ${pPct}%\n- **💧 Kapha:** ${kPct}%\n\n` +
+          `**Immediate Clinical Guidance for ${dominant} Balance:**\n` +
+          (dominant === 'Vata'
+            ? "1. **Favor:** Warm, oily, grounding cooked meals (Kitchari, stewed apples, golden milk).\n2. **Avoid:** Cold salads, iced drinks, irregular meal timings.\n3. **Herb of Choice:** *Ashwagandha* and warm sesame oil body massage (*Abhyanga*)."
+            : dominant === 'Pitta'
+            ? "1. **Favor:** Cooling sweet foods, cucumbers, coconut water, ghee, CCF tea.\n2. **Avoid:** Spicy chilies, vinegar, fried snacks, excess direct midday sun.\n3. **Herb of Choice:** *Amla*, *Shatavari*, and *Avipattikar Churna*."
+            : "1. **Favor:** Light, warm, pungent spices (Ginger, Black Pepper), boiled vegetables.\n2. **Avoid:** Heavy dairy, sweets, daytime sleeping, oily foods.\n3. **Herb of Choice:** *Triphala*, *Trikatu*, and vigorous morning Surya Namaskar."),
+        sanskritShloka: dominant === 'Vata' ? "तत्र रूक्षो लघुः शीतः खरः सूक्ष्मश्चलोऽनिलः।" : dominant === 'Pitta' ? "पित्तं सस्नेहतीक्ष्णोष्णं लघु विस्रं सरं द्रवम्।" : "स्निग्धः शीतो गुरुर्मन्दः श्लक्ष्णो मृत्स्नः स्थिरः कफः।",
+        shlokaMeaning: `Classical definition of ${dominant} qualities from Ashtanga Hridaya Sutra Sthana 1/11-12.`,
+        classicalTreatiseReference: "Ashtanga Hridaya, Sutra Sthana 1",
+        quickReplies: [`Diet for ${dominant} Dosha`, `Best herbs for ${dominant}`, "Explore Apothecary Store", "Book a Doctor"]
+      };
+
+      setMessages(prev => [...prev, resultMsg]);
+      speakText(resultMsg.reply);
+    }
+  };
+
   const clearChat = () => {
     window.speechSynthesis?.cancel();
+    setQuizStep(null);
     setMessages([{
       id: 'msg-welcome-new',
       role: 'assistant',
       reply: "Namaste! Chat history cleared. How may I assist your holistic health journey?",
-      quickReplies: ['What is my Dosha?', 'Remedy for insomnia', 'Remedy for acidity', 'Explore Store']
+      quickReplies: ['🌿 In-Chat Dosha Assessment', '⏰ What should I do right now? (Dinacharya)', 'Remedy for insomnia', 'Remedy for acidity', 'Explore Store']
     }]);
   };
 
@@ -158,6 +316,17 @@ export default function AyurBot() {
     }, 1);
   };
 
+  const exportSummary = () => {
+    const userAndBotMessages = messages.map(m => `${m.role.toUpperCase()}:\n${m.content || m.reply}\n${m.sanskritShloka ? 'SHLOKA: ' + m.sanskritShloka + '\n' : ''}`).join('\n---\n\n');
+    const blob = new Blob([`AYURVANA CLINICAL AI CONSULTATION SUMMARY\nDate: ${new Date().toLocaleDateString()}\n\n` + userAndBotMessages], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `AyurVana-Health-Summary-${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   // Helper for rendering simple markdown
   const renderMarkdown = (text) => {
     if (!text) return null;
@@ -165,6 +334,9 @@ export default function AyurBot() {
     return lines.map((line, idx) => {
       if (line.startsWith('### ')) {
         return <h4 key={idx} className="font-serif font-bold text-sm text-emerald-950 mt-2 mb-1">{line.replace('### ', '')}</h4>;
+      }
+      if (line.startsWith('#### ')) {
+        return <h5 key={idx} className="font-semibold text-xs text-emerald-900 mt-2 mb-0.5">{line.replace('#### ', '')}</h5>;
       }
       if (line.startsWith('**') && line.endsWith('**')) {
         return <p key={idx} className="font-semibold text-xs text-stone-900 my-1">{line.replace(/\*\*/g, '')}</p>;
@@ -229,7 +401,7 @@ export default function AyurBot() {
           className={`fixed z-50 transition-all duration-300 flex flex-col bg-white shadow-2xl border border-stone-200/90 overflow-hidden ${
             isExpanded
               ? 'inset-4 sm:inset-10 rounded-3xl'
-              : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[460px] h-[640px] max-h-[88vh] rounded-3xl'
+              : 'bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[480px] h-[660px] max-h-[90vh] rounded-3xl'
           }`}
         >
           {/* Header */}
@@ -242,7 +414,7 @@ export default function AyurBot() {
                 <div className="flex items-center gap-2">
                   <h3 className="font-serif font-bold text-sm tracking-wide text-white">Vaidya AI</h3>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-700/60 text-emerald-200 text-[10px] font-medium border border-emerald-600/40">
-                    Online • Ancient Wisdom
+                    Classical RAG AI
                   </span>
                 </div>
                 <p className="text-[11px] text-emerald-200/80">Clinical Ayurvedic & Herbal Companion</p>
@@ -250,6 +422,14 @@ export default function AyurBot() {
             </div>
 
             <div className="flex items-center gap-1 text-emerald-200">
+              <button
+                onClick={exportSummary}
+                title="Download Consultation Summary"
+                className="p-1.5 rounded-lg hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <FileDown className="w-4 h-4" />
+              </button>
+
               <button
                 onClick={() => setIsMuted(!isMuted)}
                 title={isMuted ? "Unmute Voice Reading" : "Mute Voice Reading"}
@@ -284,28 +464,53 @@ export default function AyurBot() {
             </div>
           </div>
 
-          {/* Quick Category Suggestions Banner */}
-          {suggestions?.categories && (
-            <div className="bg-stone-100/90 border-b border-stone-200/80 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {suggestions.categories.map((cat, idx) => (
+          {/* Quick Tools & Dinacharya Bar */}
+          <div className="bg-stone-100/90 border-b border-stone-200/80 px-3 py-1.5 flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={startInChatQuiz}
+                className="text-[11px] font-semibold text-emerald-900 bg-emerald-100/80 hover:bg-emerald-200/90 px-2.5 py-1 rounded-xl transition-all flex items-center gap-1 border border-emerald-300/60 shadow-2xs whitespace-nowrap"
+              >
+                <Activity className="w-3 h-3 text-emerald-700" />
+                <span>Mini Dosha Check</span>
+              </button>
+
+              <button
+                onClick={() => handleSendMessage('What should I do right now according to Ayurvedic Dinacharya clock?')}
+                className="text-[11px] font-medium text-stone-700 bg-white hover:bg-stone-200/80 px-2.5 py-1 rounded-xl transition-all flex items-center gap-1 border border-stone-200 whitespace-nowrap"
+              >
+                <Clock className="w-3 h-3 text-amber-600" />
+                <span>Dinacharya Clock</span>
+              </button>
+
+              {suggestions?.categories?.slice(0, 3).map((cat, idx) => (
                 <button
                   key={idx}
-                  onClick={() => {
-                    setActiveCategory(idx);
-                    handleSendMessage(cat.prompts[0]);
-                  }}
-                  className={`text-[11px] font-medium whitespace-nowrap px-2.5 py-1 rounded-xl transition-all flex items-center gap-1.5 ${
-                    activeCategory === idx
-                      ? 'bg-emerald-800 text-white shadow-sm'
-                      : 'bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200'
-                  }`}
+                  onClick={() => handleSendMessage(cat.prompts[0])}
+                  className="text-[11px] font-medium text-stone-600 bg-white hover:bg-stone-200/80 px-2.5 py-1 rounded-xl transition-all flex items-center gap-1 border border-stone-200 whitespace-nowrap hidden sm:flex"
                 >
                   <Sparkles className="w-3 h-3 text-amber-400" />
-                  <span>{cat.category}</span>
+                  <span>{cat.category.split(' ')[0]}</span>
                 </button>
               ))}
             </div>
-          )}
+
+            {/* Language Selector */}
+            <div className="flex items-center gap-0.5 bg-stone-200/80 p-0.5 rounded-lg text-[10px] font-bold text-stone-700 shrink-0">
+              <button 
+                onClick={() => setLanguage('EN')} 
+                className={`px-1.5 py-0.5 rounded ${language === 'EN' ? 'bg-white text-emerald-900 shadow-xs' : 'opacity-60'}`}
+              >
+                EN
+              </button>
+              <button 
+                onClick={() => setLanguage('HI')} 
+                className={`px-1.5 py-0.5 rounded ${language === 'HI' ? 'bg-white text-emerald-900 shadow-xs' : 'opacity-60'}`}
+              >
+                हिन्दी
+              </button>
+            </div>
+          </div>
 
           {/* Messages Scroll Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-stone-50/50 via-white to-stone-50/30">
@@ -313,12 +518,32 @@ export default function AyurBot() {
               <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                 {/* Message Bubble */}
                 <div
-                  className={`max-w-[88%] rounded-3xl p-4 shadow-sm text-xs leading-relaxed ${
+                  className={`max-w-[88%] rounded-3xl p-4 shadow-sm text-xs leading-relaxed relative group ${
                     msg.role === 'user'
                       ? 'bg-gradient-to-br from-emerald-800 to-teal-800 text-white rounded-tr-sm'
                       : 'bg-white border border-stone-200/90 text-stone-800 rounded-tl-sm'
                   }`}
                 >
+                  {/* Copy & Speech button on hover for assistant messages */}
+                  {msg.role === 'assistant' && (
+                    <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-stone-200 shadow-xs">
+                      <button
+                        onClick={() => copyToClipboard(msg.reply, msg.id)}
+                        title="Copy message"
+                        className="p-1 hover:text-emerald-700 text-stone-500 rounded"
+                      >
+                        {copiedId === msg.id ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      </button>
+                      <button
+                        onClick={() => speakText(msg.reply)}
+                        title="Read aloud"
+                        className="p-1 hover:text-emerald-700 text-stone-500 rounded"
+                      >
+                        <Volume2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
                   {msg.role === 'user' ? (
                     <p className="whitespace-pre-wrap">{msg.content}</p>
                   ) : (
@@ -466,18 +691,68 @@ export default function AyurBot() {
               </div>
             ))}
 
+            {/* In-Chat Diagnostic Quiz Modal inside Flow */}
+            {quizStep !== null && (
+              <div className="bg-gradient-to-br from-emerald-900 to-teal-950 text-white rounded-3xl p-4 shadow-lg border border-emerald-700/50 space-y-3 animate-fadeIn">
+                <div className="flex items-center justify-between text-xs text-emerald-300">
+                  <span className="font-semibold flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-amber-400" />
+                    Prakriti Quick Diagnostic
+                  </span>
+                  <span>Question {quizStep + 1} of {quizQuestions.length}</span>
+                </div>
+
+                <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-amber-400 h-full transition-all duration-300"
+                    style={{ width: `${((quizStep + 1) / quizQuestions.length) * 100}%` }}
+                  />
+                </div>
+
+                <h4 className="font-serif font-bold text-sm text-white">
+                  {quizQuestions[quizStep].title}
+                </h4>
+
+                <div className="space-y-2 pt-1">
+                  {quizQuestions[quizStep].options.map((opt, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleQuizAnswer(opt.dosha)}
+                      className="w-full text-left bg-white/10 hover:bg-white/20 border border-white/20 p-2.5 rounded-2xl text-xs text-emerald-100 hover:text-white transition-all flex items-center gap-2.5 group"
+                    >
+                      <span className="text-base">{opt.icon}</span>
+                      <span className="flex-1">{opt.label}</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-emerald-300 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {loading && (
               <div className="flex items-center gap-2 text-stone-500 text-xs bg-stone-100/80 px-4 py-2.5 rounded-2xl w-max animate-pulse">
                 <Bot className="w-4 h-4 text-emerald-600 animate-spin" />
-                <span>Vaidya AI is consulting classical texts...</span>
+                <span>Vaidya AI is retrieving classical treatises & formulas...</span>
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Chat Input Bar */}
+          {/* Chat Input Bar with Speech Recognition & Instant Send */}
           <div className="p-3 bg-white border-t border-stone-200 flex items-center gap-2">
+            <button
+              onClick={toggleListening}
+              title={isListening ? "Listening... click to stop" : "Voice query (Speech to text)"}
+              className={`p-2.5 rounded-2xl transition-all ${
+                isListening 
+                  ? 'bg-rose-500 text-white animate-pulse shadow-md' 
+                  : 'bg-stone-100 hover:bg-emerald-50 text-stone-600 hover:text-emerald-800 border border-stone-200'
+              }`}
+            >
+              {isListening ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+            </button>
+
             <input
               ref={inputRef}
               type="text"
@@ -489,7 +764,7 @@ export default function AyurBot() {
                   handleSendMessage();
                 }
               }}
-              placeholder="Ask about Doshas, remedies, herbs, diet..."
+              placeholder={isListening ? "Listening to your voice..." : "Ask about symptoms, herbs, recipes, Doshas..."}
               className="flex-1 bg-stone-100 border border-stone-200 rounded-2xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-emerald-600/30 focus:border-emerald-600 transition-all"
             />
 
