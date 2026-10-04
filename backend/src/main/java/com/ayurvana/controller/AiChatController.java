@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AiChatController {
 
+    
+
     private final AiChatService aiChatService;
 
     @PostMapping("/message")
