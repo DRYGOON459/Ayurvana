@@ -22,6 +22,7 @@ public class AiChatController {
     public ResponseEntity<ApiResponse<AiChatMessageResponse>> sendMessage(
             @Valid @RequestBody AiChatMessageRequest request,
             Authentication authentication) {
+
         String userEmail = authentication != null ? authentication.getName() : null;
         AiChatMessageResponse response = aiChatService.processMessage(request, userEmail);
         return ResponseEntity.ok(ApiResponse.success(response, "Vaidya AI response generated"));
