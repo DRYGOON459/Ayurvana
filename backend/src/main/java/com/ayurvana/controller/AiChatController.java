@@ -31,6 +31,7 @@ public class AiChatController {
     @GetMapping("/suggestions")
     public ResponseEntity<ApiResponse<AiChatSuggestionResponse>> getSuggestions() {
         AiChatSuggestionResponse suggestions = aiChatService.getSuggestions();
+
         return ResponseEntity.ok(ApiResponse.success(suggestions, "AI suggestions retrieved"));
     }
 }
