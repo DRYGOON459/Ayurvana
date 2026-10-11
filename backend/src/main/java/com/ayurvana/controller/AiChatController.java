@@ -21,9 +21,7 @@ public class AiChatController {
     @PostMapping("/message")
     public ResponseEntity<ApiResponse<AiChatMessageResponse>> sendMessage(
             @Valid @RequestBody AiChatMessageRequest request,
-            Authentication authentication)
-
-    {
+            Authentication authentication) {
 
         String userEmail = authentication != null ? authentication.getName() : null;
         AiChatMessageResponse response = aiChatService.processMessage(request, userEmail);
