@@ -34,4 +34,5 @@ public class AiChatController {
         return ResponseEntity.ok(ApiResponse.success(suggestions, "AI suggestions retrieved"));
 
     }
+
 }
