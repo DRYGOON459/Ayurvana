@@ -32,5 +32,6 @@ public class AiChatController {
     public ResponseEntity<ApiResponse<AiChatSuggestionResponse>> getSuggestions() {
         AiChatSuggestionResponse suggestions = aiChatService.getSuggestions();
         return ResponseEntity.ok(ApiResponse.success(suggestions, "AI suggestions retrieved"));
+
     }
 }
